@@ -3,7 +3,7 @@ import { ClientResponseEntity } from "./client.response.entity";
 
 
 export class ClientOnChatController {
-    static handle(user: any, message: String): ClientResponseEntity {
+    static handle(user: any, message: string): ClientResponseEntity {
         const simplifiedMessage = message.toLocaleLowerCase();
 
         if(simplifiedMessage.startsWith("!iq")) {

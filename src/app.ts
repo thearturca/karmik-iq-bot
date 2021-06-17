@@ -21,7 +21,6 @@ export class app {
         });
 
         await client.connect();
-        const chatSymbol: unique symbol = Symbol("chat");
         client.on("chat", async (channel: String, user: any, message: String, self: boolean) => {
             if (self) return
             const response: ClientResponseEntity = ClientOnChatModule.handle(user, message);
