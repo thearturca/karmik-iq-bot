@@ -24,8 +24,8 @@ export class app {
         const chatSymbol: unique symbol = Symbol("chat");
         client.on("chat", async (channel: String, user: any, message: String, self: boolean) => {
             if (self) return
-            const response: ClientResponseEntity = ClientOnChatModule.handle(user, message);
 
+            const response: ClientResponseEntity = ClientOnChatModule.handle(user, message);
             switch(response.type){
                 case 'none':
                     await client.say(target, "Нечего ответить")
@@ -34,6 +34,11 @@ export class app {
 
                 case 'reply':
                     await client.reply(target, response.message, response.user)
+                    return
+                break;
+
+                case 'say':
+                    await client.say(target, response.message)
                     return
                 break;
             }
