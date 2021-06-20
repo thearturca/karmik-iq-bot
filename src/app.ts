@@ -4,8 +4,8 @@ import { ClientResponseEntity } from './modules/client/client.response.entity';
 
 export class app {
     public static async start(): Promise<void> {
-        const target = "thearturca"
 
+        const target = "thearturca"
         const client = new _client({
             options: {
               debug: false
