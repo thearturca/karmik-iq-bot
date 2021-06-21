@@ -4,7 +4,7 @@ import { ClientResponseEntity } from "./client.response.entity";
 export class ClientOnChatModule {
     constructor () {}
 
-    static handle(user: any, message: String):ClientResponseEntity {
-        return ClientOnChatController.handle(user, message);
+    static async handle(user: any, message: string): Promise<ClientResponseEntity> {
+        return await ClientOnChatController.handle(user, message);
     }
 }

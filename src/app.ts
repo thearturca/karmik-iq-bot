@@ -21,13 +21,13 @@ export class app {
         });
 
         await client.connect();
-        client.on("chat", async (channel: String, user: any, message: String, self: boolean) => {
+        client.on("chat", async (channel: String, user: any, message: string, self: boolean) => {
             if (self) return
 
-            const response: ClientResponseEntity = ClientOnChatModule.handle(user, message);
+            const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message);
             switch(response.type){
                 case 'none':
-                    await client.say(target, "Нечего ответить")
+                    await client.say(target, response.message)
                     return
                 break;
 

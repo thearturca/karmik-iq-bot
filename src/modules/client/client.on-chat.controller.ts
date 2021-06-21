@@ -3,11 +3,11 @@ import { ClientResponseEntity } from "./client.response.entity";
 
 
 export class ClientOnChatController {
-    static handle(user: any, message: string): ClientResponseEntity {
+    static async handle(user: any, message: string): Promise<ClientResponseEntity> {
         const simplifiedMessage = message.toLocaleLowerCase();
-
+        
         if(simplifiedMessage.startsWith("!iq")) {
-            return ClientIqController.handle(user, message);
+            return await ClientIqController.handle(user, message);
         }
 
         return new ClientResponseEntity("none")

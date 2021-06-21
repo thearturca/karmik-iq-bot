@@ -1,9 +1,12 @@
-import { IqEntity } from "./iq.entity";
+import { IqUserEntity } from "./iq.user.entity";
 
 
 export class IqTestResultEntity {
     constructor(
-        private readonly _status: string,
-        private readonly _iq: IqEntity
+        private readonly _user: IqUserEntity,
     ) {}
+
+    get user(): IqUserEntity {
+        return this._user
+    }
 }

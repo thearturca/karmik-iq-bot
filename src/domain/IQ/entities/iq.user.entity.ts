@@ -4,7 +4,7 @@ import { getBaseLog, randomG } from "./iq.utility";
 
 export class IqUserEntity {
     constructor(
-        public username: String,
+        public username: string,
         private _iq: IqEntity,
         private _numberOfTries: number,
         private readonly _isVip: boolean,
@@ -23,8 +23,8 @@ export class IqUserEntity {
     get numberOfTries(): number {
         return this._numberOfTries
     }
-    get iq(): IqEntity {
-        return this._iq;
+    get iq(): number{
+        return this._iq.amount;
     }
 
 

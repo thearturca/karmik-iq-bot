@@ -3,7 +3,7 @@ type responseMessage = string | undefined;
 
 export class ClientResponseEntity {
     constructor(
-        private readonly _responseType: null | string,
+        private readonly _responseType: string,
         private readonly _user?: any,
         private readonly _responseMessage?: responseMessage,
 
