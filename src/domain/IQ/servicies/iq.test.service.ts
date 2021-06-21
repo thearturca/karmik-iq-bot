@@ -12,12 +12,10 @@ export class IqTestService implements IqTestUseCase {
         ) {}
     async test(command: IqTestCommand): Promise<IqUserEntity> {
         const user: IqUserEntity = await this._iqLoadUserPort.loadUser(command.username);
-        console.log(user);
         user.setIsSub = command.isSub;
         user.setIsVip = command.isVip;
         user.setSubMonths = command.subMonths;
         user.rollIq();
-        console.log(user);
         await this._iqUpdateUserPort.updateUser(user);
         return user;
     }

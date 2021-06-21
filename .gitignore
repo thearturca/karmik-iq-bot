@@ -89,5 +89,6 @@ typings/
 #  App config files
 config/
 db/
+data/
 
-keytartest.js
+*.db
