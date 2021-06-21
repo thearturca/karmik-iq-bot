@@ -1,28 +1,50 @@
 import { IqEntity } from "./iq.entity";
 import { getBaseLog, randomG } from "./iq.utility";
 
+export type isSub = boolean | undefined;
+export type isVip = boolean | undefined;
+export type userId = number | null;
 
 export class IqUserEntity {
     constructor(
         public username: string,
         private _iq: IqEntity,
-        private _numberOfTries: number,
-        private readonly _isVip: boolean,
-        private readonly _isSub: boolean,
-        public readonly subMonth: number
+        private readonly _id?: userId,
+        private _isVip?: boolean,
+        private _isSub?: boolean,
+        private _subMonths?: number,
          ) {}
 
-    get isVip(): boolean {
+    get isVip(): isVip{
+        if(this._isVip === undefined) {
+            return false;
+        }
         return this._isVip;
     }
 
-    get isSUb(): boolean {
+    set setIsVip(value: isVip) {
+        this._isVip = value;
+    }
+
+    get isSub(): isSub{
+        if(this._isSub === undefined) {
+            return false;
+        }
         return this._isSub;
     }
 
-    get numberOfTries(): number {
-        return this._numberOfTries
+    set setIsSub(value: isSub) {
+        this._isSub = value;
     }
+
+    get subMonths(): number {
+        return this._subMonths || 0;
+    }
+
+    set setSubMonths(value: number) {
+        this._subMonths = value;
+    }
+
     get iq(): number{
         return this._iq.amount;
     }
@@ -31,12 +53,17 @@ export class IqUserEntity {
     set setIq(value: IqEntity) {
         this._iq = value;
     }
+
+    get id(): userId {
+        return this._id === undefined ? null : this._id;
+    }
+
     public rollIq() {
-        const monthsSubbed: number = Math.abs((2 + Math.floor(randomG() * (24+this.subMonth))));
+        const monthsSubbed: number = Math.abs((2 + Math.floor(randomG() * (24+this.subMonths))));
         const VIPCoeff: number = this.isVip ? Math.floor(randomG() * 20) : 0;
         const monthsCoeff: number = getBaseLog(monthsSubbed, 12);
 
-        const iq_min: number = Math.floor(30 * monthsCoeff + VIPCoeff);
+        const iq_min: number = Math.floor(50 * monthsCoeff + VIPCoeff);
         const iq_max: number = Math.floor(160 * monthsCoeff + VIPCoeff) - iq_min;
 
         const iq: number = iq_min + Math.floor(randomG() * iq_max);

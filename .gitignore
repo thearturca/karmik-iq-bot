@@ -86,9 +86,6 @@ typings/
 # Webpack
 .webpack/
 
-# Electron-Forge
-out/
-
 #  App config files
 config/
 db/
