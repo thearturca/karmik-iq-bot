@@ -1,9 +1,6 @@
-import { IqEntity } from "../../domain/IQ/entities/iq.entity";
-import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { IqTestCommand } from "../../domain/IQ/ports/in/iq.test.command";
 import { IqTestUsePort } from "../../domain/IQ/ports/in/iq.test.user-port";
 import { IqUserPersistenceAdapter } from "../iq.user-persistence/iq.user-persistence.adapter";
-import { IqUserPersistenceModuel } from "../iq.user-persistence/iq.user-persistence.module";
 import { ClientResponseEntity } from "./client.response.entity";
 
 

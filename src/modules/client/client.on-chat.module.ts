@@ -1,4 +1,3 @@
-import { IqUserPersistenceAdapter } from "../iq.user-persistence/iq.user-persistence.adapter";
 import { ClientOnChatController } from "./client.on-chat.controller";
 import { ClientResponseEntity } from "./client.response.entity";
 

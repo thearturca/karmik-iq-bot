@@ -38,7 +38,7 @@ export class app {
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
             switch(response.type){
                 case 'none':
-                    await client.say(target, response.message)
+                   // await client.say(target, response.message)
                     return
                 break;
 
