@@ -2,6 +2,7 @@ import { createConnection } from "typeorm";
 import { IqUserPersistenceAdapter } from "./iq.user-persistence.adapter";
 import { join } from 'path';
 import { IqUserOrmEntity } from "./iq.user.orm-entity";
+import { IqUserActivityOrmEntity } from "./iq.user.activity.orm-entity";
 
 
 export class IqUserPersistenceModuel {
@@ -9,11 +10,11 @@ export class IqUserPersistenceModuel {
         const connection = await createConnection({
                 type: "sqlite",
                 database: join (__dirname, "..", "..", "..", "..", "data", "iq.db"),
-                entities: [IqUserOrmEntity],
+                entities: [IqUserOrmEntity, IqUserActivityOrmEntity],
                 synchronize: true,
-                logging: true
+                logging: false
         });
 
-        return new IqUserPersistenceAdapter(connection.getRepository(IqUserOrmEntity));
+        return new IqUserPersistenceAdapter(connection.getRepository(IqUserOrmEntity), connection.getRepository(IqUserActivityOrmEntity));
     }
 }

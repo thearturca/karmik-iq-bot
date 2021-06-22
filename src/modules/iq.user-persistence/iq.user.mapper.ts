@@ -1,11 +1,29 @@
+import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-window.entity";
+import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
 import { IqEntity } from "../../domain/IQ/entities/iq.entity";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
+import { IqUserActivityOrmEntity } from "./iq.user.activity.orm-entity";
 import { IqUserOrmEntity } from "./iq.user.orm-entity";
 
 
 export class IqUserMapper {
-    static mapToUserEntity(user: IqUserOrmEntity): IqUserEntity {
-        return new IqUserEntity(user.username, IqEntity.of(user.iq), user.id);
+    static mapToUserEntity(user: IqUserOrmEntity, activities: IqUserActivityOrmEntity[]): IqUserEntity {
+        const activityWindow: IqActivityWindowEntity = this.mapToActivityWindow(activities)
+        return new IqUserEntity(user.username, activityWindow, user.id);
+    }
+
+    static mapToActivityWindow(activities: IqUserActivityOrmEntity[]): IqActivityWindowEntity {
+        const activityWindowEntity = new IqActivityWindowEntity();
+        activities.forEach((activity) => {
+            const activityEntity: IqActivityEntity = new IqActivityEntity(
+                activity.username,
+                new Date(activity.timestamp),
+                activity.iq,
+                activity.id
+            )
+            activityWindowEntity.addActivity(activityEntity);
+        })
+        return activityWindowEntity;
     }
 
     static mapToUserOrmEntity(user: IqUserEntity): IqUserOrmEntity {
@@ -17,5 +35,16 @@ export class IqUserMapper {
             iqUserOrmEntity.id = user.id;
         }
         return iqUserOrmEntity;
+    }
+
+    static mapToActivityOrmEntity(activity: IqActivityEntity): IqUserActivityOrmEntity {
+        const iqUserActivityOrmEntity: IqUserActivityOrmEntity = new IqUserActivityOrmEntity();
+        iqUserActivityOrmEntity.username = activity.username;
+        iqUserActivityOrmEntity.timestamp = activity.timestamp.getTime();
+        iqUserActivityOrmEntity.iq = activity.iq;
+        if (activity.id !== null) {
+            iqUserActivityOrmEntity.id = activity.id;
+        }
+        return iqUserActivityOrmEntity;
     }
 }

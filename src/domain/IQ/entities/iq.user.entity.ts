@@ -1,3 +1,5 @@
+import { IqActivityWindowEntity } from "./iq.activity-window.entity";
+import { IqActivityEntity } from "./iq.activity.entity";
 import { IqEntity } from "./iq.entity";
 import { getBaseLog, randomG } from "./iq.utility";
 
@@ -8,12 +10,17 @@ export type userId = number | null;
 export class IqUserEntity {
     constructor(
         public username: string,
-        private _iq: IqEntity,
+        private readonly _activityWindow: IqActivityWindowEntity,
         private readonly _id?: userId,
+        private _iq?: number,
         private _isVip?: boolean,
         private _isSub?: boolean,
         private _subMonths?: number,
          ) {}
+
+    get activityWindow():IqActivityWindowEntity {
+        return this._activityWindow;
+    }
 
     get isVip(): isVip{
         if(this._isVip === undefined) {
@@ -46,11 +53,12 @@ export class IqUserEntity {
     }
 
     get iq(): number{
-        return this._iq.amount;
+        if (this._iq === undefined) return this.rollIq();
+        return this._iq;
     }
 
 
-    set setIq(value: IqEntity) {
+    set setIq(value: number) {
         this._iq = value;
     }
 
@@ -67,7 +75,10 @@ export class IqUserEntity {
         const iq_max: number = Math.floor(160 * monthsCoeff + VIPCoeff) - iq_min;
 
         const iq: number = iq_min + Math.floor(randomG() * iq_max);
-        this.setIq = IqEntity.of(iq);
+        this.setIq = iq;
+
+        const activity: IqActivityEntity = new IqActivityEntity(this.username, new Date(), this.iq)
+        this._activityWindow.addActivity(activity)
         return this.iq;
     }
 

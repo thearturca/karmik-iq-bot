@@ -17,6 +17,7 @@ export class IqTestService implements IqTestUseCase {
         user.setSubMonths = command.subMonths;
         user.rollIq();
         await this._iqUpdateUserPort.updateUser(user);
+        await this._iqUpdateUserPort.updateActivities(user);
         return user;
     }
 }

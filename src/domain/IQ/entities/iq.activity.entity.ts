@@ -6,7 +6,7 @@ export class IqActivityEntity {
     constructor(
         private readonly _username: string,
         private readonly _timestamp: Date,
-        private readonly _iq: IqEntity,
+        private readonly _iq: number,
         private readonly _id?: ActivityId
     ) {}
 
@@ -19,7 +19,7 @@ export class IqActivityEntity {
     }
 
     get iq(): number {
-        return this._iq.amount;
+        return this._iq;
     }
 
     get id(): ActivityId {
