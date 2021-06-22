@@ -10,7 +10,8 @@ export class IqUserPersistenceModuel {
                 type: "sqlite",
                 database: join (__dirname, "..", "..", "..", "..", "data", "iq.db"),
                 entities: [IqUserOrmEntity],
-                logging: false
+                synchronize: true,
+                logging: true
         });
 
         return new IqUserPersistenceAdapter(connection.getRepository(IqUserOrmEntity));
