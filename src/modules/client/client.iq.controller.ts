@@ -1,5 +1,5 @@
 import { IqTestCommand } from "../../domain/IQ/ports/in/iq.test.command";
-import { IqTestUsePort } from "../../domain/IQ/ports/in/iq.test.user-port";
+import { IqTestUsePort } from "../../domain/IQ/ports/in/iq.test.use-port";
 import { IqUserPersistenceAdapter } from "../iq.user-persistence/iq.user-persistence.adapter";
 import { ClientResponseEntity } from "./client.response.entity";
 
