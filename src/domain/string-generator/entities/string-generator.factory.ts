@@ -6,7 +6,7 @@ import { IqStringGenerator } from "./iq.string-generator.entity";
 export class StringGeneratorFactory {
     constructor () {}
 
-    getGenerator(stringType: string): StringGeneratorEntity {
+    static getGenerator(stringType: string): StringGeneratorEntity {
         switch(stringType) {
             case "iq":
                 return new IqStringGenerator();

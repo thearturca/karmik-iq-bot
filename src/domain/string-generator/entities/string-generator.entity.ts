@@ -1,5 +1,5 @@
 
 
 export interface StringGeneratorEntity {
-    generate(): string
+    generate(name: string): string
 }
