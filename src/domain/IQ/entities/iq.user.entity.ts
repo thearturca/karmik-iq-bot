@@ -77,6 +77,7 @@ export class IqUserEntity {
         const iq: number = iq_min + Math.floor(randomG() * iq_max);
         this.setIq = iq;
 
+        console.log(`this.subMonths = ${this.subMonths}`);
         console.log(`monthsSubbed = ${monthsSubbed}`);
         console.log(`VIPCoeff = ${VIPCoeff}`);
         console.log(`monthsCoeff = ${monthsCoeff}`);

@@ -1,5 +1,6 @@
+import { StringGeneratorGenerateCommand } from "./string-generator.generate.command";
 
 
 export interface StringGeneratorGenerateUseCase {
-    generate(): string;
+    generate(command: StringGeneratorGenerateCommand): Promise<string>;
 }
