@@ -6,7 +6,6 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 export class IqUserOrmEntity {
     @PrimaryGeneratedColumn()   
     id: number;
-
     
     @Column()
     username: string;

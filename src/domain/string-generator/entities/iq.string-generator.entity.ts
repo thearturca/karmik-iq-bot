@@ -1,7 +1,13 @@
 import { StringGeneratorEntity } from "./string-generator.entity";
 
 export class IqStringGenerator implements StringGeneratorEntity {
-    constructor() {}
+    constructor(
+        readonly _strings: string[] = []
+    ) {}
+
+    get strings(): string[] {
+        return this._strings
+    }
 
     generate(name: string): string {
         switch(name){
