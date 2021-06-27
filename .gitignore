@@ -92,3 +92,4 @@ db/
 data/
 
 *.db
+data/iq.db
