@@ -77,6 +77,13 @@ export class IqUserEntity {
         const iq: number = iq_min + Math.floor(randomG() * iq_max);
         this.setIq = iq;
 
+        console.log(`monthsSubbed = ${monthsSubbed}`);
+        console.log(`VIPCoeff = ${VIPCoeff}`);
+        console.log(`monthsCoeff = ${monthsCoeff}`);
+        console.log(`iq_min = ${iq_min}`);
+        console.log(`iq_max = ${iq_max}`);
+        console.log(`iq = ${iq}`);
+
         const activity: IqActivityEntity = new IqActivityEntity(this.username, new Date(), this.iq)
         this._activityWindow.addActivity(activity)
         return this.iq;

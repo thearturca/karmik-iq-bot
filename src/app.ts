@@ -43,18 +43,18 @@ export class app {
                 break;
 
                 case 'reply':
-                   // await client.reply(target, response.message, response.user)
-                    console.log("Date: ", new Date());
-                    console.log("Message: \n", message);
-                    console.log("response: \n", response);
+                    // await client.reply(target, response.message, response.user)
+                    // console.log("Date: ", new Date());
+                    // console.log("Message: \n", message);
+                    // console.log("response: \n", response);
                     return
                 break;
 
                 case 'say':
                     //await client.say(target, response.message)
-                    console.log("Date: ", new Date());
-                    console.log("Message: \n", message);
-                    console.log("response: \n", response);
+                    // console.log("Date: ", new Date());
+                    // console.log("Message: \n", message);
+                    // console.log("response: \n", response);
                     return
                 break;
             }
