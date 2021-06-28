@@ -17,7 +17,7 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqUpdateUserSta
 
     async loadUser(username: string): Promise<IqUserEntity> {
 
-        const user: IqUserOrmEntity | undefined = await this._iqUserRepository.findOne({username: username.toLocaleLowerCase()});
+        const user: IqUserOrmEntity | undefined = await this._iqUserRepository.findOne({username: username.toLowerCase()});
         if(user === undefined){
             const newUser: IqUserOrmEntity = new IqUserOrmEntity();
             newUser.username = username.toLowerCase();
