@@ -1,8 +1,5 @@
 
 
-export class StringGeneratorGenerateCommand {
-    constructor (
-        private readonly _type: string,
-        private readonly _options: {[k: string]: any}
-    ) {}
+export interface StringGeneratorGenerateCommand {
+    readonly type: string,
 }
