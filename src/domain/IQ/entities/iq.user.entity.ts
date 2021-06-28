@@ -69,9 +69,7 @@ export class IqUserEntity {
     public rollIq() {
         //const monthsSubbed: number = Math.abs((2 + Math.floor(randomG() * (24 + this.subMonths))));
         let monthsSubbed: number = Math.floor(randomG() * 24 + this.subMonths);
-        console.log(monthsSubbed);
         monthsSubbed = Math.abs(2 + monthsSubbed);
-        console.log(monthsSubbed);
         const VIPCoeff: number = this.isVip ? Math.floor(randomG() * 20) : 0;
         const monthsCoeff: number = getBaseLog(monthsSubbed, 12);
 
