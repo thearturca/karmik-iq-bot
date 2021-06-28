@@ -32,29 +32,29 @@ export class app {
         console.log(`Connecting to ${target} twitch channel...`);
         await client.connect();
         console.log("Connected!");
-        client.on("chat", async (channel: String, user: any, message: string, self: boolean) => {
+        client.on("chat", async (channel: string, user: any, message: string, self: boolean) => {
             if (self) return
 
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
             switch(response.type){
                 case 'none':
-                   // await client.say(target, response.message)
+                    //await client.say(channel, response.message)
                     return
                 break;
 
                 case 'reply':
-                    // await client.reply(target, response.message, response.user)
-                    // console.log("Date: ", new Date());
-                    // console.log("Message: \n", message);
-                    // console.log("response: \n", response);
+                    // await client.reply(channel, response.message, response.user)
+                    console.log("Date: ", new Date());
+                    console.log("Message: \n", message);
+                    console.log("Response: \n", response);
                     return
                 break;
 
                 case 'say':
-                    //await client.say(target, response.message)
-                    // console.log("Date: ", new Date());
-                    // console.log("Message: \n", message);
-                    // console.log("response: \n", response);
+                    //await client.say(channel, response.message)
+                    console.log("Date: ", new Date());
+                    console.log("Message: \n", message);
+                    console.log("Response: \n", response);
                     return
                 break;
             }
