@@ -13,7 +13,7 @@ export class IqUserPersistenceModuel {
                 name: "Iq",
                 entities: [IqUserOrmEntity, IqUserActivityOrmEntity],
                 synchronize: true,
-                logging: false
+                logging: true
         });
 
         return new IqUserPersistenceAdapter(connection.getRepository(IqUserOrmEntity), connection.getRepository(IqUserActivityOrmEntity));

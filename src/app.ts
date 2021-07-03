@@ -20,7 +20,7 @@ export class app {
         adapters.iqAdapter = iqAdapter;
         adapters.messageGeneratorAdapter = messageGeneratorAdapter;
 
-        const target = "karmikkoala"
+        const target = "thearturca"
         const client = new _client({
             options: {
               debug: false
@@ -49,7 +49,7 @@ export class app {
                 break;
 
                 case 'reply':
-                    // await client.reply(channel, response.message, response.user)
+                    await client.reply(channel, response.message, response.user)
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
                     console.log("Response: \n", response);

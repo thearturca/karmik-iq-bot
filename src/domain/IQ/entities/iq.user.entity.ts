@@ -1,6 +1,5 @@
 import { IqActivityWindowEntity } from "./iq.activity-window.entity";
 import { IqActivityEntity } from "./iq.activity.entity";
-import { IqEntity } from "./iq.entity";
 import { getBaseLog, randomG } from "./iq.utility";
 
 export type isSub = boolean | undefined;

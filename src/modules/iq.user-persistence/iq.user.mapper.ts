@@ -1,6 +1,5 @@
 import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-window.entity";
 import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
-import { IqEntity } from "../../domain/IQ/entities/iq.entity";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { IqUserActivityOrmEntity } from "./iq.user.activity.orm-entity";
 import { IqUserOrmEntity } from "./iq.user.orm-entity";
@@ -9,7 +8,7 @@ import { IqUserOrmEntity } from "./iq.user.orm-entity";
 export class IqUserMapper {
     static mapToUserEntity(user: IqUserOrmEntity, activities: IqUserActivityOrmEntity[]): IqUserEntity {
         const activityWindow: IqActivityWindowEntity = this.mapToActivityWindow(activities)
-        return new IqUserEntity(user.username, activityWindow, user.id);
+        return new IqUserEntity(user.username, activityWindow, user.id, user.iq);
     }
 
     static mapToActivityWindow(activities: IqUserActivityOrmEntity[]): IqActivityWindowEntity {
