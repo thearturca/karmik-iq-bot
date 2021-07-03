@@ -89,7 +89,4 @@ typings/
 #  App config files
 config/
 db/
-data/
-
-*.db
 data/iq.db
