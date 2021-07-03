@@ -46,7 +46,7 @@ export class ClientIqController {
                 const responseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(generateMessageCommand);
 
                 const responseMessage = _.template(responseMessageTemplate)({iq: result.iq})
-                const response = new ClientResponseEntity("reply", user, responseMessage + ` ${result.iq}`);
+                const response = new ClientResponseEntity("reply", user, responseMessage);
                 return response;
             break;
             default:
