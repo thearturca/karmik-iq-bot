@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("MessagesBank")
-export class StringGeneratorGeneratedStringOrmEntity {
+export class GeneratedMessageOrmEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

@@ -7,7 +7,7 @@ export class ClientOnChatController {
         const simplifiedMessage = message.toLocaleLowerCase();
         
         if(simplifiedMessage.startsWith("!iq")) {
-            return await ClientIqController.handle(user, message, adapters.iqAdapter);
+            return await ClientIqController.handle(user, message, adapters.messageGeneratorAdapter, adapters.iqAdapter);
         }
 
         return new ClientResponseEntity("none")

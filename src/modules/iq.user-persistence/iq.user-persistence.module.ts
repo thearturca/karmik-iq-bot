@@ -10,6 +10,7 @@ export class IqUserPersistenceModuel {
         const connection = await createConnection({
                 type: "sqlite",
                 database: join (__dirname, "..", "..", "..", "..", "data", "iq.db"),
+                name: "Iq",
                 entities: [IqUserOrmEntity, IqUserActivityOrmEntity],
                 synchronize: true,
                 logging: false

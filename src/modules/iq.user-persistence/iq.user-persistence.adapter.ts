@@ -1,6 +1,5 @@
 import { Repository } from "typeorm";
 import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
-import { IqEntity } from "../../domain/IQ/entities/iq.entity";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { IqLoadUserPort } from "../../domain/IQ/ports/out/iq.load-user.port";
 import { IqUpdateUserStatePort } from "../../domain/IQ/ports/out/iq.update-user.port";
