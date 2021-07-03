@@ -20,7 +20,7 @@ export class app {
         adapters.iqAdapter = iqAdapter;
         adapters.messageGeneratorAdapter = messageGeneratorAdapter;
 
-        const target = "thearturca"
+        const target = "karmikkoala"
         const client = new _client({
             options: {
               debug: false
