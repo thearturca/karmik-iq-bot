@@ -65,7 +65,6 @@ export class ClientIqController {
                 }
 
                 const iqTopCommand: IqLoadUsersTopCommand = new IqLoadUsersTopCommand(take, "DESC");
-                //Наладить промис(не успевает грузить из базы)
                 const iqTopResult: IqUserEntity[] = await this._iqLoadUsersTopUsePort.loadUsersTop(iqTopCommand);
                 if (iqTopResult.length === 0 || iqTopResult === undefined) {
                     const iqTopGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "top-none")

@@ -69,19 +69,12 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqUpdateUserSta
 
         let users: IqUserEntity[] = [];
 
-        const usersOrmPromise = new Promise((resolve, reject) => {
-            usersOrm.forEach(async (user, i) => {
-                const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: user.username});
-                users.push(IqUserMapper.mapToUserEntity(user, activities));
-                if (i === (usersOrm.length - 1)) {
-                    resolve(true)
-                };
+            usersOrm.forEach((user) => {
+                //Need to fix
+                //const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: user.username});
+                users.push(IqUserMapper.mapToUserEntity(user, []));
             })
-        });
-        
-        const waitPromise: boolean = await usersOrmPromise.then(() => {
-            return true;
-        });
+
         return users;
     }
 
