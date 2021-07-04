@@ -6,10 +6,10 @@ import { IqUserActivityOrmEntity } from "./iq.user.activity.orm-entity";
 
 
 export class IqUserPersistenceModuel {
-    async connect (): Promise<IqUserPersistenceAdapter> { 
+    async connect (channel: string): Promise<IqUserPersistenceAdapter> { 
         const connection = await createConnection({
                 type: "sqlite",
-                database: join (__dirname, "..", "..", "..", "..", "data", "iq.db"),
+                database: join (__dirname, "..", "..", "..", "..", "data", `${channel}-iq.db`),
                 name: "Iq",
                 entities: [IqUserOrmEntity, IqUserActivityOrmEntity],
                 synchronize: true,

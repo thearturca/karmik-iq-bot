@@ -5,28 +5,29 @@ import { StringGeneratorGeneratePort } from "../../domain/string-generator/ports
 import { IqUserPersistenceAdapter } from "../iq.user-persistence/iq.user-persistence.adapter";
 import { MessageGeneratorPersistenceAdapter } from "../message-generator.persistence/message-generator-persistence.adapter";
 import { ClientResponseEntity } from "./client.response.entity";
-
-import _ from "lodash";
 import { IqLoadUsersTopCommand } from "../../domain/IQ/ports/in/iq.load-users-top.command";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { IqLoadUsersTopUsePort } from "../../domain/IQ/ports/in/iq.load-users-top.use-port";
-
+import _ from "lodash";
+import { IqLoadUserUsePort } from "../../domain/IQ/ports/in/iq.load-user.use-port";
+import { IqLoadUserCommand } from "../../domain/IQ/ports/in/iq.load-user.command";
 
 export class ClientIqController {
-
-
     private static _iqTestUsePort: IqTestUsePort;
     private static _iqLoadUsersTopUsePort: IqLoadUsersTopUsePort;
+    private static _iqLoadUserUsePort: IqLoadUserUsePort;
     private static _messageGeneratorGeneratePort: StringGeneratorGeneratePort;
+
     constructor() {}
+
     static async handle(user: any, message: string, messageGeneratorAdapter: MessageGeneratorPersistenceAdapter,iqAdapter: IqUserPersistenceAdapter): Promise<ClientResponseEntity> {
         
         this._iqTestUsePort = new IqTestUsePort(iqAdapter, iqAdapter);
         this._iqLoadUsersTopUsePort = new IqLoadUsersTopUsePort(iqAdapter);
+        this._iqLoadUserUsePort = new IqLoadUserUsePort(iqAdapter);
         this._messageGeneratorGeneratePort = new StringGeneratorGeneratePort(messageGeneratorAdapter);
         const simplifiedMessage: string = message.toLowerCase();
         const commandArgs :string[] = simplifiedMessage.slice(1).split(' ');
-
         switch(commandArgs[1]) {
             case "test":
                 const { badges, 'badge-info': badgeInfo } = user;
@@ -113,16 +114,41 @@ export class ClientIqController {
                     antitopList += `${i+1}. ${user.iq} IQ - ${user.username}${(i === (iqAntitopResult.length - 1)) ? ". " : ", "}`
                 })
                 const iqAntitopGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "top")
-
                 const iqAntitopResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqAntitopGenerateMessageCommand);
-
                 const iqAntitopResponseMessage: string = _.template(iqAntitopResponseMessageTemplate)({list: antitopList, take: antitopTake})
                 const iqAntitopResponse = new ClientResponseEntity("reply", user, iqAntitopResponseMessage);
                 return iqAntitopResponse;
 
             break;
             default:
-                return new ClientResponseEntity("none")
+                if (commandArgs[1] !== undefined) {
+                    const commandUsername = commandArgs[1].startsWith("@") ? commandArgs[1].substr(1) : commandArgs[1];
+                    const loadUserCommand = new IqLoadUserCommand(commandUsername);
+                    const commandUser = await this._iqLoadUserUsePort.loadUser(loadUserCommand);
+
+                    const getIqGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "default-nickname")
+                    const getIqResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(getIqGenerateMessageCommand);
+                    const getIqResponseMessage: string = _.template(getIqResponseMessageTemplate)({username: commandUser.username, iq: commandUser.iq});
+
+                    const getCommandsListCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "commands-list");
+                    const getCommandsListTemplate: string = await this._messageGeneratorGeneratePort.generate(getCommandsListCommand);
+                    const getCommandsList: string = _.template(getCommandsListTemplate)();
+
+                    const getIqResponse = new ClientResponseEntity("reply", user, getIqResponseMessage + ' ' + getCommandsList);
+                    return getIqResponse;
+                }
+                const loadUserCommand = new IqLoadUserCommand(user["display-name"]);
+                const commandUser = await this._iqLoadUserUsePort.loadUser(loadUserCommand);
+                const getIqGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "default")
+                const getIqResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(getIqGenerateMessageCommand);
+                const getIqResponseMessage: string = _.template(getIqResponseMessageTemplate)({iq: commandUser.iq});
+
+                const getCommandsListCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "commands-list");
+                const getCommandsListTemplate: string = await this._messageGeneratorGeneratePort.generate(getCommandsListCommand);
+                const getCommandsList: string = _.template(getCommandsListTemplate)();
+
+                const getIqResponse = new ClientResponseEntity("reply", user, getIqResponseMessage + ' ' + getCommandsList);
+                return getIqResponse;
             break;
         }
 

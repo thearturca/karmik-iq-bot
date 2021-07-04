@@ -6,6 +6,7 @@ import { MessageGeneratorPersistenceModule } from './modules/message-generator.p
 
 export class app {
     public static async start(): Promise<void> {
+        const target = "thearturca"
         const messageGeneratorPersistenceModule: MessageGeneratorPersistenceModule = new MessageGeneratorPersistenceModule();
         console.log("Connecting to message generator DB...");
         const messageGeneratorAdapter = await messageGeneratorPersistenceModule.connect();
@@ -13,14 +14,13 @@ export class app {
 
         const iqPersistenceModule: IqUserPersistenceModuel = new IqUserPersistenceModuel();
         console.log("Connecting to iq DB...");
-        const iqAdapter = await iqPersistenceModule.connect();
+        const iqAdapter = await iqPersistenceModule.connect(target);
         console.log("Connected!");
 
         const adapters: {[k: string]: any} = {};
         adapters.iqAdapter = iqAdapter;
         adapters.messageGeneratorAdapter = messageGeneratorAdapter;
 
-        const target = "thearturca"
         const client = new _client({
             options: {
               debug: false
@@ -38,6 +38,7 @@ export class app {
         console.log(`Connecting to ${target} twitch channel...`);
         await client.connect();
         console.log("Connected!");
+        
         client.on("chat", async (channel: string, user: any, message: string, self: boolean) => {
             if (self) return
 
