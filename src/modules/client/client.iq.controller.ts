@@ -56,15 +56,15 @@ export class ClientIqController {
                 return iqTestResponse;
             break;
             case "top":
-                let take: number = Number(commandArgs[2]);
-                if (Number.isNaN(take) || take === undefined) {
-                    take = 5;
+                let topTake: number = Number(commandArgs[2]);
+                if (Number.isNaN(topTake) || topTake === undefined) {
+                    topTake = 5;
                 }
-                if (take > 10) {
-                    take = 10;
+                if (topTake > 10) {
+                    topTake = 10;
                 }
 
-                const iqTopCommand: IqLoadUsersTopCommand = new IqLoadUsersTopCommand(take, "DESC");
+                const iqTopCommand: IqLoadUsersTopCommand = new IqLoadUsersTopCommand(topTake, "DESC");
                 const iqTopResult: IqUserEntity[] = await this._iqLoadUsersTopUsePort.loadUsersTop(iqTopCommand);
                 if (iqTopResult.length === 0 || iqTopResult === undefined) {
                     const iqTopGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "top-none")
@@ -75,17 +75,50 @@ export class ClientIqController {
                     const iqTopResponse = new ClientResponseEntity("reply", user, iqTopResponseMessage);
                     return iqTopResponse;
                 }
-                let list: string = "";
+                let topList: string = "";
                 iqTopResult.forEach((user, i) => {
-                    list += `${i+1}. ${user.username}: ${user.iq} IQ${(i === (iqTopResult.length - 1)) ? ". " : ", "}`
+                    topList += `${i+1}. ${user.iq} IQ - ${user.username}${(i === (iqTopResult.length - 1)) ? ". " : ", "}`
                 })
                 const iqTopGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "top")
 
                 const iqTopResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTopGenerateMessageCommand);
 
-                const iqTopResponseMessage: string = _.template(iqTopResponseMessageTemplate)({list: list, take: take})
+                const iqTopResponseMessage: string = _.template(iqTopResponseMessageTemplate)({list: topList, take: topTake})
                 const iqTopResponse = new ClientResponseEntity("reply", user, iqTopResponseMessage);
                 return iqTopResponse;
+
+            break;
+            case "antitop":
+                let antitopTake: number = Number(commandArgs[2]);
+                if (Number.isNaN(antitopTake) || antitopTake === undefined) {
+                    antitopTake = 5;
+                }
+                if (antitopTake > 10) {
+                    antitopTake = 10;
+                }
+
+                const iqAntitopCommand: IqLoadUsersTopCommand = new IqLoadUsersTopCommand(antitopTake, "ASC");
+                const iqAntitopResult: IqUserEntity[] = await this._iqLoadUsersTopUsePort.loadUsersTop(iqAntitopCommand);
+                if (iqAntitopResult.length === 0 || iqAntitopResult === undefined) {
+                    const iqAntitopGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "top-none")
+
+                    const iqAntitopResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqAntitopGenerateMessageCommand);
+
+                    const iqAntitopResponseMessage: string = _.template(iqAntitopResponseMessageTemplate)()
+                    const iqAntitopResponse = new ClientResponseEntity("reply", user, iqAntitopResponseMessage);
+                    return iqAntitopResponse;
+                }
+                let antitopList: string = "";
+                iqAntitopResult.forEach((user, i) => {
+                    antitopList += `${i+1}. ${user.iq} IQ - ${user.username}${(i === (iqAntitopResult.length - 1)) ? ". " : ", "}`
+                })
+                const iqAntitopGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "top")
+
+                const iqAntitopResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqAntitopGenerateMessageCommand);
+
+                const iqAntitopResponseMessage: string = _.template(iqAntitopResponseMessageTemplate)({list: antitopList, take: antitopTake})
+                const iqAntitopResponse = new ClientResponseEntity("reply", user, iqAntitopResponseMessage);
+                return iqAntitopResponse;
 
             break;
             default:
