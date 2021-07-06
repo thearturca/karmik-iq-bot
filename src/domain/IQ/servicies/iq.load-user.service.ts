@@ -10,7 +10,7 @@ export class IqLoadUserService implements IqLoadUserUseCase{
         private readonly _iqLoadUserPort: IqLoadUserPort
     ) {}
 
-        async loadUser(command: IqLoadUserCommand): Promise<IqUserEntity> {
+        async loadUser(command: IqLoadUserCommand): Promise<IqUserEntity | null> {
             const user = await this._iqLoadUserPort.loadUser(command.username);
             return user;
         }

@@ -3,6 +3,7 @@ import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-win
 import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { order } from "../../domain/IQ/ports/in/iq.load-users-top.command";
+import { IqLoadOrAddUserPort } from "../../domain/IQ/ports/out/iq.load-or-add-user.port";
 import { IqLoadUserActivitiesPort } from "../../domain/IQ/ports/out/iq.load-user-activities.port";
 import { IqLoadUserPort } from "../../domain/IQ/ports/out/iq.load-user.port";
 import { IqLoadUsersTopPort } from "../../domain/IQ/ports/out/iq.load-users-top.port";
@@ -12,13 +13,23 @@ import { IqUserMapper } from "./iq.user.mapper";
 import { IqUserOrmEntity } from "./iq.user.orm-entity";
 
 
-export class IqUserPersistenceAdapter implements IqLoadUserPort, IqUpdateUserStatePort, IqLoadUsersTopPort, IqLoadUserActivitiesPort {
+export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUserPort, IqUpdateUserStatePort, IqLoadUsersTopPort, IqLoadUserActivitiesPort {
     constructor(
         private readonly _iqUserRepository: Repository<IqUserOrmEntity>,
         private readonly _iqUserActivityRepository: Repository<IqUserActivityOrmEntity>
         ) {}
 
-    async loadUser(username: string): Promise<IqUserEntity> {
+    async loadUser(username: string): Promise<IqUserEntity | null> {
+
+        const user: IqUserOrmEntity | undefined = await this._iqUserRepository.findOne({username: username.toLowerCase()});
+        if(user === undefined){
+            return null;
+        }
+        const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: username});
+        return IqUserMapper.mapToUserEntity(user, activities)
+    }
+
+    async loadOrAddUser(username: string): Promise<IqUserEntity> {
 
         const user: IqUserOrmEntity | undefined = await this._iqUserRepository.findOne({username: username.toLowerCase()});
         if(user === undefined){
@@ -27,7 +38,7 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqUpdateUserSta
             newUser.userdisplayname = username;
             newUser.iq = 100;
             await this._iqUserRepository.save((newUser))
-            return this.loadUser(newUser.username);
+            return this.loadOrAddUser(newUser.username);
         }
         const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: username});
         return IqUserMapper.mapToUserEntity(user, activities)

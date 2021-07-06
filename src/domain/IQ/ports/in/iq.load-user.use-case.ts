@@ -3,5 +3,5 @@ import { IqLoadUserCommand } from "./iq.load-user.command";
 
 
 export interface IqLoadUserUseCase {
-    loadUser(command: IqLoadUserCommand): Promise<IqUserEntity>;
+    loadUser(command: IqLoadUserCommand): Promise<IqUserEntity | null>;
 }
