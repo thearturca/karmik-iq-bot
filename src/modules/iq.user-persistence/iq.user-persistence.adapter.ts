@@ -20,7 +20,6 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
         ) {}
 
     async loadUser(username: string): Promise<IqUserEntity | null> {
-
         const user: IqUserOrmEntity | undefined = await this._iqUserRepository.findOne({username: username.toLowerCase()});
         if(user === undefined){
             return null;
