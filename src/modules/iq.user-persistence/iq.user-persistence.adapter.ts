@@ -35,7 +35,6 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
             const newUser: IqUserOrmEntity = new IqUserOrmEntity();
             newUser.username = username.toLowerCase();
             newUser.userdisplayname = username;
-            newUser.iq = 100;
             await this._iqUserRepository.save((newUser))
             return this.loadOrAddUser(newUser.username);
         }
@@ -43,7 +42,7 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
         return IqUserMapper.mapToUserEntity(user, activities)
     }
 
-    async updateUser(user: IqUserEntity) {
+    async updateUser(user: IqUserEntity): Promise<void> {
         const username: string = user.username.toLowerCase();
         const findUser: IqUserOrmEntity | undefined  = await this._iqUserRepository.findOne({username: username});
         if (findUser === undefined) {
@@ -53,10 +52,11 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
 
         if(findUser.id !== undefined) {
             this._iqUserRepository.save(IqUserMapper.mapToUserOrmEntity(user))
+            return;
         }
     }
 
-    async updateActivities(user: IqUserEntity) {
+    async updateActivities(user: IqUserEntity): Promise<void> {
         user.activityWindow.activities.forEach((activity: IqActivityEntity) => {
             if (activity.id === null) {
                 this._iqUserActivityRepository.save(IqUserMapper.mapToActivityOrmEntity(activity))
@@ -76,15 +76,12 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
             },
             take: take
         });
-
         let users: IqUserEntity[] = [];
-
-            usersOrm.forEach((user) => {
-                //Need to fix
-                //const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: user.username});
-                users.push(IqUserMapper.mapToUserEntity(user, []));
-            })
-
+        usersOrm.forEach((user) => {
+            //Need to fix
+            //const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: user.username});
+            users.push(IqUserMapper.mapToUserEntity(user, []));
+        })
         return users;
     }
 

@@ -8,7 +8,7 @@ import { IqUserOrmEntity } from "./iq.user.orm-entity";
 export class IqUserMapper {
     static mapToUserEntity(user: IqUserOrmEntity, activities: IqUserActivityOrmEntity[]): IqUserEntity {
         const activityWindow: IqActivityWindowEntity = this.mapToActivityWindow(activities)
-        return new IqUserEntity(user.username, activityWindow, user.id, user.iq);
+        return new IqUserEntity(user.username, activityWindow, user.id, user.iq, user.maxTryNumber);
     }
 
     static mapToActivityWindow(activities: IqUserActivityOrmEntity[]): IqActivityWindowEntity {
@@ -27,9 +27,10 @@ export class IqUserMapper {
 
     static mapToUserOrmEntity(user: IqUserEntity): IqUserOrmEntity {
         const iqUserOrmEntity: IqUserOrmEntity = new IqUserOrmEntity;
-        iqUserOrmEntity.username = user.username.toLocaleLowerCase();
+        iqUserOrmEntity.username = user.username.toLowerCase();
         iqUserOrmEntity.userdisplayname = user.username;
         iqUserOrmEntity.iq = user.iq;
+        iqUserOrmEntity.maxTryNumber = user.maxTryNumber;
         if (user.id !== null) {
             iqUserOrmEntity.id = user.id;
         }

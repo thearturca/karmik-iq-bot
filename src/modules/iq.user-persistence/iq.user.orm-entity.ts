@@ -13,6 +13,9 @@ export class IqUserOrmEntity {
     @Column()
     userdisplayname: string;
 
-    @Column()
+    @Column({default: 100})
     iq: number;
+
+    @Column({default: 3})
+    maxTryNumber: number;
 }

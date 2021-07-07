@@ -12,6 +12,7 @@ export class IqUserEntity {
         private readonly _activityWindow: IqActivityWindowEntity,
         private readonly _id?: userId,
         private _iq?: number,
+        private _maxTryNumber?: number,
         private _isVip?: boolean,
         private _isSub?: boolean,
         private _subMonths?: number,
@@ -63,6 +64,17 @@ export class IqUserEntity {
 
     get id(): userId {
         return this._id === undefined ? null : this._id;
+    }
+
+    get maxTryNumber(): number {
+        if(this._maxTryNumber === undefined) {
+            return 3;
+        }
+        return this._maxTryNumber;
+    }
+
+    set setMaxTryNumber(value: number) {
+        this._maxTryNumber = value;
     }
 
     public rollIq() {
