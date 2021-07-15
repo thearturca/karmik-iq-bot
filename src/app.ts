@@ -1,20 +1,31 @@
 import { client as _client } from 'tmi.js-reply-fork';
 import { ClientOnChatModule } from './modules/client/client.on-chat.module';
 import { ClientResponseEntity } from './modules/client/client.response.entity';
+import { GuardAdapter } from './modules/guard/guard.adapter';
+import { GuardModule } from './modules/guard/guard.module';
+import { IqUserPersistenceAdapter } from './modules/iq.user-persistence/iq.user-persistence.adapter';
 import { IqUserPersistenceModuel } from './modules/iq.user-persistence/iq.user-persistence.module';
+import { MessageGeneratorPersistenceAdapter } from './modules/message-generator.persistence/message-generator-persistence.adapter';
 import { MessageGeneratorPersistenceModule } from './modules/message-generator.persistence/message-generator-persistence.module';
 
 export class app {
     public static async start(): Promise<void> {
+        //guard and cooldown adapter
+        const guard: GuardAdapter = new GuardModule();
+
+        //set target twitch channel
         const target = "thearturca"
+
+        //connect to response message db
         const messageGeneratorPersistenceModule: MessageGeneratorPersistenceModule = new MessageGeneratorPersistenceModule();
         console.log("Connecting to message generator DB...");
-        const messageGeneratorAdapter = await messageGeneratorPersistenceModule.connect();
+        const messageGeneratorAdapter: MessageGeneratorPersistenceAdapter = await messageGeneratorPersistenceModule.connect();
         console.log("Connected!");
 
+        //connect to iq db
         const iqPersistenceModule: IqUserPersistenceModuel = new IqUserPersistenceModuel();
         console.log("Connecting to iq DB...");
-        const iqAdapter = await iqPersistenceModule.connect(target);
+        const iqAdapter: IqUserPersistenceAdapter = await iqPersistenceModule.connect(target);
         console.log("Connected!");
 
         const adapters: {[k: string]: any} = {};
@@ -41,6 +52,7 @@ export class app {
         
         client.on("chat", async (channel: string, user: any, message: string, self: boolean) => {
             if (self) return
+            if(!guard.maySendResponse()) return
 
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
             switch(response.type){
@@ -58,7 +70,7 @@ export class app {
                 break;
 
                 case 'say':
-                    //await client.say(channel, response.message)
+                    await client.say(channel, response.message)
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
                     console.log("Response: \n", response);
