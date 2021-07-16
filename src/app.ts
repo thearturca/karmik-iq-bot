@@ -52,7 +52,7 @@ export class app {
         
         client.on("chat", async (channel: string, user: any, message: string, self: boolean) => {
             if (self) return
-            if(!guard.maySendResponse()) return
+            if (!guard.maySendResponse()) return
 
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
             switch(response.type){

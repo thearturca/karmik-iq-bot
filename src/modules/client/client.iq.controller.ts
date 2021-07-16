@@ -22,7 +22,7 @@ export class ClientIqController {
 
     constructor() {}
 
-    static async handle(user: any, message: string, messageGeneratorAdapter: MessageGeneratorPersistenceAdapter,iqAdapter: IqUserPersistenceAdapter): Promise<ClientResponseEntity> {
+    static async handle(user: any, message: string, messageGeneratorAdapter: MessageGeneratorPersistenceAdapter, iqAdapter: IqUserPersistenceAdapter): Promise<ClientResponseEntity> {
         this._iqTestUsePort = new IqTestUsePort(iqAdapter, iqAdapter);
         this._iqLoadUsersTopUsePort = new IqLoadUsersTopUsePort(iqAdapter);
         this._iqLoadUserUsePort = new IqLoadUserUsePort(iqAdapter);
@@ -97,7 +97,6 @@ export class ClientIqController {
                 const iqAntitopResponseMessage: string = _.template(iqAntitopResponseMessageTemplate)({list: antitopList, take: antitopTake})
                 const iqAntitopResponse = new ClientResponseEntity("reply", user, iqAntitopResponseMessage);
                 return iqAntitopResponse;
-
             break;
             default:
                 //check for username

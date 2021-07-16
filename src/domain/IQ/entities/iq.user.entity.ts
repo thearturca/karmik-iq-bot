@@ -95,5 +95,9 @@ export class IqUserEntity {
         return this.iq;
     }
 
+    public mayRollIq(): boolean {
+        return true;
+    }
+
    
 }
