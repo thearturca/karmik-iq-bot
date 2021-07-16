@@ -108,7 +108,7 @@ export class IqUserEntity {
         const iq: number = iq_min + Math.floor(randomG() * iq_max);
         this.setIq = iq;
 
-        const activity: IqActivityEntity = new IqActivityEntity(this.username, new Date(), this.iq)
+        const activity: IqActivityEntity = new IqActivityEntity(this.username.toLowerCase(), new Date(), this.iq)
         this._activityWindow.addActivity(activity)
         return true;
     }
