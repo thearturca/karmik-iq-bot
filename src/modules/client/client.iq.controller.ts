@@ -11,6 +11,7 @@ import { IqLoadUsersTopUsePort } from "../../domain/IQ/ports/in/iq.load-users-to
 import { IqLoadUserUsePort } from "../../domain/IQ/ports/in/iq.load-user.use-port";
 import { IqLoadUserCommand } from "../../domain/IQ/ports/in/iq.load-user.command";
 import _ from "lodash";
+import { IqTestResultEntity } from "../../domain/IQ/entities/iq.test-result.entity";
 
 
 export class ClientIqController {
@@ -44,13 +45,48 @@ export class ClientIqController {
                     }
                 }
                 const iqTestCommand: IqTestCommand = new IqTestCommand(user["display-name"], isVIP || isMod, isSub, subMonths, message);
-                const iqTestResult = await this._iqTestUsePort.test(iqTestCommand);
-                //generate message for response
-                const iqTestGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "test")
-                const iqTestResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTestGenerateMessageCommand);
-                const iqTestResponseMessage = _.template(iqTestResponseMessageTemplate)({iq: iqTestResult.iq})
-                const iqTestResponse = new ClientResponseEntity("reply", user, iqTestResponseMessage);
-                return iqTestResponse;
+                const iqTestResult: IqTestResultEntity = await this._iqTestUsePort.test(iqTestCommand);
+                if(iqTestResult.status){
+                    //generate message for response
+                    const iqTestGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "test")
+                    const iqTestResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTestGenerateMessageCommand);
+                    const iqTestResponseMessage = _.template(iqTestResponseMessageTemplate)({iq: iqTestResult.iq});
+
+                    let iqTestTryNumberResponseMessage: string = "";
+                    if(iqTestResult.tryNumber < iqTestResult.maxTryNumber) {
+                        //generate message for response
+                        const iqTestTryNumberGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "test-try")
+                        const iqTestTryNumberResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTestTryNumberGenerateMessageCommand);
+                        iqTestTryNumberResponseMessage = _.template(iqTestTryNumberResponseMessageTemplate)({tryLeft: iqTestResult.maxTryNumber - iqTestResult.tryNumber});
+                    } else {
+                        //generate message for response
+                        const iqTestTryNumberGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "test-no-tries")
+                        const iqTestTryNumberResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTestTryNumberGenerateMessageCommand);
+                        iqTestTryNumberResponseMessage = _.template(iqTestTryNumberResponseMessageTemplate)();
+                    }
+
+                    const iqTestResponse = new ClientResponseEntity("reply", user, iqTestResponseMessage + " " + iqTestTryNumberResponseMessage);
+                    return iqTestResponse;  
+                } else {
+                     //generate message for response
+                    const iqTestCDGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "test-cd")
+                    const iqTestCDResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTestCDGenerateMessageCommand);
+
+                    const userCDinfo = Math.floor(((iqTestResult.lastTryTimestamp + 9 * 1000 * 60 * 60) - Date.now()) / 1000);
+                    const userCdHours = Math.floor((userCDinfo / 60) / 60);
+                    const userCdMinutes = Math.floor((userCDinfo / 60) - (userCdHours * 60));
+                    
+                    const iqTestCDResponseMessage = _.template(iqTestCDResponseMessageTemplate)({h: userCdHours, m: userCdMinutes});
+
+                    const iqTestGenerateMessageCommand: StringGeneratorGenerateCommand = new StringGeneratorGenerateCommand("iq", "default")
+                    const iqTestResponseMessageTemplate: string = await this._messageGeneratorGeneratePort.generate(iqTestGenerateMessageCommand);
+                    const iqTestResponseMessage = _.template(iqTestResponseMessageTemplate)({iq: iqTestResult.iq});
+
+                    const iqTestResponse = new ClientResponseEntity("reply", user, iqTestCDResponseMessage + " " + iqTestResponseMessage);
+                    return iqTestResponse;
+                }
+               
+                
             break;
             case "top":
                 const topTake: number = Number(commandArgs[2]);

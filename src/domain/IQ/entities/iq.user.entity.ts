@@ -1,3 +1,4 @@
+import { max } from "lodash";
 import { IqActivityWindowEntity } from "./iq.activity-window.entity";
 import { IqActivityEntity } from "./iq.activity.entity";
 import { getBaseLog, randomG } from "./iq.utility";
@@ -10,8 +11,8 @@ export class IqUserEntity {
     constructor(
         public username: string,
         private readonly _activityWindow: IqActivityWindowEntity,
+        private _iq: number,
         private readonly _id?: userId,
-        private _iq?: number,
         private _maxTryNumber?: number,
         private _isVip?: boolean,
         private _isSub?: boolean,
@@ -53,7 +54,7 @@ export class IqUserEntity {
     }
 
     get iq(): number{
-        if (this._iq === undefined) return this.rollIq();
+        //if (this._iq === undefined) return this.rollIq();
         return this._iq;
     }
 
@@ -73,12 +74,29 @@ export class IqUserEntity {
         return this._maxTryNumber;
     }
 
+    get tryNumber(): number {
+        const curTime: number = Date.now();
+        let tryCount: number = 0;
+        this._activityWindow.activities.forEach((activiity) => {
+            if(activiity.timestamp.getTime() > (curTime - 9 * 1000 * 60)) {
+                tryCount++;
+            }
+        });
+        return tryCount;
+    }
+
+    get lastTryTimestamp(): number {
+        const timestampValues: number[] = this.activityWindow.activities.map(val => val.timestamp.getTime());
+        const maxTimestampValue = Math.max.apply(null, timestampValues);
+        return maxTimestampValue
+    }
+
     set setMaxTryNumber(value: number) {
         this._maxTryNumber = value;
     }
 
-    public rollIq() {
-        //const monthsSubbed: number = Math.abs((2 + Math.floor(randomG() * (24 + this.subMonths))));
+    public rollIq(): boolean {
+        if (!this.mayRollIq()) return false;
         let monthsSubbed: number = Math.floor(randomG() * 24 + this.subMonths);
         monthsSubbed = Math.abs(2 + monthsSubbed);
         const VIPCoeff: number = this.isVip ? Math.floor(randomG() * 20) : 0;
@@ -92,12 +110,18 @@ export class IqUserEntity {
 
         const activity: IqActivityEntity = new IqActivityEntity(this.username, new Date(), this.iq)
         this._activityWindow.addActivity(activity)
-        return this.iq;
-    }
-
-    public mayRollIq(): boolean {
         return true;
     }
 
-   
+    public mayRollIq(): boolean {
+        const curTime: number = Date.now();
+        if (this.lastTryTimestamp + - (9 * 1000 * 60 * 60) > curTime ) {
+            return true;
+        }
+        if (this.tryNumber >= this.maxTryNumber) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -1,5 +1,3 @@
-import { IqEntity } from "./iq.entity";
-
 export type ActivityId = number | null;
 
 export class IqActivityEntity {

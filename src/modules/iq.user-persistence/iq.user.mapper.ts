@@ -8,7 +8,7 @@ import { IqUserOrmEntity } from "./iq.user.orm-entity";
 export class IqUserMapper {
     static mapToUserEntity(user: IqUserOrmEntity, activities: IqUserActivityOrmEntity[]): IqUserEntity {
         const activityWindow: IqActivityWindowEntity = this.mapToActivityWindow(activities)
-        return new IqUserEntity(user.username, activityWindow, user.id, user.iq, user.maxTryNumber);
+        return new IqUserEntity(user.username, activityWindow, user.iq, user.id, user.maxTryNumber);
     }
 
     static mapToActivityWindow(activities: IqUserActivityOrmEntity[]): IqActivityWindowEntity {

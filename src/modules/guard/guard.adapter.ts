@@ -18,10 +18,14 @@ export class GuardAdapter {
             return this._cooldownSec;
         }
 
+        public updateCooldownTime(): void {
+            const curTime = Date.now();
+            this.setCooldownTime= curTime + this.cooldownSec * 1000;
+        }
+
         public maySendResponse(): boolean {
             const curTime = Date.now();
             if (curTime >= this.cooldownTime) {
-                this.setCooldownTime= curTime + this.cooldownSec * 1000;
                 return true;
             }
             return false;
