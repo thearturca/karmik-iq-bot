@@ -14,7 +14,7 @@ export class app {
         const guard: GuardAdapter = new GuardModule();
 
         //set target twitch channel
-        const target = "thearturca"
+        const target = "karmikkoala"
 
         //connect to response message db
         const messageGeneratorPersistenceModule: MessageGeneratorPersistenceModule = new MessageGeneratorPersistenceModule();
