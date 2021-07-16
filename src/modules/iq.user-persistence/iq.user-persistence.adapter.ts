@@ -29,13 +29,12 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
     }
 
     async loadOrAddUser(username: string): Promise<IqUserEntity> {
-
         const user: IqUserOrmEntity | undefined = await this._iqUserRepository.findOne({username: username.toLowerCase()});
         if(user === undefined){
             const newUser: IqUserOrmEntity = new IqUserOrmEntity();
             newUser.username = username.toLowerCase();
             newUser.userdisplayname = username;
-            await this._iqUserRepository.save((newUser))
+            await this._iqUserRepository.save(newUser)
             return this.loadOrAddUser(newUser.username);
         }
         const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: username});
