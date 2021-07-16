@@ -37,7 +37,7 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
             await this._iqUserRepository.save(newUser)
             return this.loadOrAddUser(newUser.username);
         }
-        const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: username});
+        const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: username.toLowerCase()});
         return IqUserMapper.mapToUserEntity(user, activities)
     }
 
