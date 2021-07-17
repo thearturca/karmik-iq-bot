@@ -200,7 +200,7 @@ export class ClientIqController {
                 }
             }).length;
             const getAllUserIq: number[] = commandUser.activityWindow.activities.map(val => val.iq);
-            const avgIq: number = getAllUserIq.reduce((a,b)=> {return a+b}) / getAllUserIq.length;
+            const avgIq: number = Math.floor(getAllUserIq.reduce((a,b)=> {return a+b}) / getAllUserIq.length);
 
             const getIqStatsResponseMessage: string = _.template(await this._getMessageTemplate("iq", "stats-user"))({
                 avgIq: avgIq,
@@ -210,6 +210,8 @@ export class ClientIqController {
             const getIqResponse = new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage);
             return getIqResponse;
         }
+        const loadUsersCommand: IqLoadUsersTopCommand = new IqLoadUsersTopCommand(0, "DESC");
+        const usersCount: number = (await this._iqLoadUsersTopUsePort.loadUsersTop(loadUsersCommand)).length;
         const getAllTests: IqActivityWindowEntity = await this._iqLoadAllUsersActivitiesUsePort.loadAllUsersActivities();
         const last24HTestsCount: number = getAllTests.activities.map((value) => {
             const curTime = Date.now();
@@ -222,7 +224,7 @@ export class ClientIqController {
 
         const getIqStatsResponseMessage: string = _.template(await this._getMessageTemplate("iq", "stats"))({
             avgIq: avgIq,
-            usersCount: getAllTests.activities.length,
+            usersCount: usersCount,
             last24HTestsCount: last24HTestsCount
         });
         return new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage)
