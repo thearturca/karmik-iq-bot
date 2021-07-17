@@ -218,7 +218,7 @@ export class ClientIqController {
             }
         }).length;
         const getAllIq: number[] = getAllTests.activities.map(val => val.iq);
-        const avgIq: number = getAllIq.reduce((a,b)=> {return a+b}) / getAllIq.length;
+        const avgIq: number = Math.floor(getAllIq.reduce((a,b)=> {return a+b}) / getAllIq.length);
 
         const getIqStatsResponseMessage: string = _.template(await this._getMessageTemplate("iq", "stats"))({
             avgIq: avgIq,
