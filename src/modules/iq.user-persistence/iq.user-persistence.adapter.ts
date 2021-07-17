@@ -3,6 +3,7 @@ import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-win
 import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { order } from "../../domain/IQ/ports/in/iq.load-users-top.command";
+import { IqLoadAllUsersActivitiesPort } from "../../domain/IQ/ports/out/iq.load-all-users-activities.port";
 import { IqLoadOrAddUserPort } from "../../domain/IQ/ports/out/iq.load-or-add-user.port";
 import { IqLoadUserActivitiesPort } from "../../domain/IQ/ports/out/iq.load-user-activities.port";
 import { IqLoadUserPort } from "../../domain/IQ/ports/out/iq.load-user.port";
@@ -13,7 +14,7 @@ import { IqUserMapper } from "./iq.user.mapper";
 import { IqUserOrmEntity } from "./iq.user.orm-entity";
 
 
-export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUserPort, IqUpdateUserStatePort, IqLoadUsersTopPort, IqLoadUserActivitiesPort {
+export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUserPort, IqUpdateUserStatePort, IqLoadUsersTopPort, IqLoadUserActivitiesPort, IqLoadAllUsersActivitiesPort {
     constructor(
         private readonly _iqUserRepository: Repository<IqUserOrmEntity>,
         private readonly _iqUserActivityRepository: Repository<IqUserActivityOrmEntity>
@@ -82,6 +83,11 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
             users.push(IqUserMapper.mapToUserEntity(user, []));
         })
         return users;
+    }
+
+    async loadAllUsersActivities(): Promise<IqActivityWindowEntity>{
+        const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find();
+        return IqUserMapper.mapToActivityWindow(activities);
     }
 
 

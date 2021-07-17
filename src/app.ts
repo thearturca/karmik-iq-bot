@@ -62,8 +62,8 @@ export class app {
                 break;
 
                 case 'reply':
-                  //  await client.reply(channel, response.message, response.user);
-                  //  guard.updateCooldownTime();
+                    await client.reply(channel, response.message, response.user);
+                    guard.updateCooldownTime();
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
                     console.log("Response: \n", response);
@@ -71,8 +71,8 @@ export class app {
                 break;
 
                 case 'say':
-                  //  await client.say(channel, response.message);
-                   // guard.updateCooldownTime();
+                    await client.say(channel, response.message);
+                    guard.updateCooldownTime();
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
                     console.log("Response: \n", response);
