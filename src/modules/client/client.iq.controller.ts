@@ -181,6 +181,7 @@ export class ClientIqController {
     }
 
     private static async _stats(user: ChatUserstate, message: string, commandArgs: string[]): Promise<ClientResponseEntity> {
+        const timerStart: number = Date.now();
         if (commandArgs[2] !== undefined) {
             const commandUsername = commandArgs[2].startsWith("@") ? commandArgs[2].substr(1) : commandArgs[2];
             const loadUserCommand = new IqLoadUserCommand(commandUsername);
@@ -206,11 +207,13 @@ export class ClientIqController {
             const avgIq: number = Math.floor(getAllUserIq.reduce((a,b)=> {return a+b}) / getAllUserIq.length);
 
             const getIqStatsResponseMessage: string = _.template(await this._getMessageTemplate("iq", "stats-user"))({
+                username: commandUser.username,
                 avgIq: avgIq,
                 userTestsCount: commandUser.activityWindow.activities.length,
                 last24HTestsCount: last24HTestsCount 
             });
             const getIqResponse = new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage);
+            console.log((Date.now() - timerStart));
             return getIqResponse;
         }
         const usersCount: number = (await this._iqLoadAllUsersUsePort.loadAllUsers()).length;
@@ -229,6 +232,7 @@ export class ClientIqController {
             usersCount: usersCount,
             last24HTestsCount: last24HTestsCount
         });
+        console.log((Date.now() - timerStart));
         return new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage)
     }
 
