@@ -16,7 +16,7 @@
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
-    "tmi.js-reply-fork": "^1.8.3",
+    "tmi.js-reply-fork": "^1.8.4",
     "typeorm": "^0.2.34"
   },
   "devDependencies": {

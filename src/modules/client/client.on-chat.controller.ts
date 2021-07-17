@@ -1,5 +1,5 @@
 import { ClientIqController } from "./client.iq.controller";
-import { ClientResponseEntity } from "./client.response.entity";
+import { ClientResponseEntity, ClientResponseType } from "./client.response.entity";
 
 
 export class ClientOnChatController {
@@ -10,7 +10,7 @@ export class ClientOnChatController {
             return await ClientIqController.handle(user, message, adapters.messageGeneratorAdapter, adapters.iqAdapter);
         }
 
-        return new ClientResponseEntity("none")
+        return new ClientResponseEntity(ClientResponseType.none)
         
     }
 }

@@ -1,4 +1,3 @@
-import { max } from "lodash";
 import { IqActivityWindowEntity } from "./iq.activity-window.entity";
 import { IqActivityEntity } from "./iq.activity.entity";
 import { getBaseLog, randomG } from "./iq.utility";
@@ -54,7 +53,6 @@ export class IqUserEntity {
     }
 
     get iq(): number{
-        //if (this._iq === undefined) return this.rollIq();
         return this._iq;
     }
 

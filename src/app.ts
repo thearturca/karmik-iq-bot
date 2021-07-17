@@ -1,4 +1,4 @@
-import { client as _client } from 'tmi.js-reply-fork';
+import { ChatUserstate, client as _client } from 'tmi.js-reply-fork';
 import { ClientOnChatModule } from './modules/client/client.on-chat.module';
 import { ClientResponseEntity } from './modules/client/client.response.entity';
 import { GuardAdapter } from './modules/guard/guard.adapter';
@@ -50,20 +50,20 @@ export class app {
         await client.connect();
         console.log("Connected!");
         
-        client.on("chat", async (channel: string, user: any, message: string, self: boolean) => {
+        client.on("chat", async (channel: string, user: ChatUserstate, message: string, self: boolean) => {
             if (self) return
             if (!guard.maySendResponse()) return
 
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
-            switch(response.type){
+            switch(response.type?.toString()){
                 case 'none':
                     //await client.say(channel, response.message)
                     return
                 break;
 
                 case 'reply':
-                    await client.reply(channel, response.message, response.user);
-                    guard.updateCooldownTime();
+                  //  await client.reply(channel, response.message, response.user);
+                  //  guard.updateCooldownTime();
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
                     console.log("Response: \n", response);
@@ -71,8 +71,8 @@ export class app {
                 break;
 
                 case 'say':
-                    await client.say(channel, response.message);
-                    guard.updateCooldownTime();
+                  //  await client.say(channel, response.message);
+                   // guard.updateCooldownTime();
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
                     console.log("Response: \n", response);
