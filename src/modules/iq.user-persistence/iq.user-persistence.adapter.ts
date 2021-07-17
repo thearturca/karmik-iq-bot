@@ -4,6 +4,7 @@ import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
 import { IqUserEntity } from "../../domain/IQ/entities/iq.user.entity";
 import { order } from "../../domain/IQ/ports/in/iq.load-users-top.command";
 import { IqLoadAllUsersActivitiesPort } from "../../domain/IQ/ports/out/iq.load-all-users-activities.port";
+import { IqLoadAllUsersPort } from "../../domain/IQ/ports/out/iq.load-all-users.port";
 import { IqLoadOrAddUserPort } from "../../domain/IQ/ports/out/iq.load-or-add-user.port";
 import { IqLoadUserActivitiesPort } from "../../domain/IQ/ports/out/iq.load-user-activities.port";
 import { IqLoadUserPort } from "../../domain/IQ/ports/out/iq.load-user.port";
@@ -14,7 +15,7 @@ import { IqUserMapper } from "./iq.user.mapper";
 import { IqUserOrmEntity } from "./iq.user.orm-entity";
 
 
-export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUserPort, IqUpdateUserStatePort, IqLoadUsersTopPort, IqLoadUserActivitiesPort, IqLoadAllUsersActivitiesPort {
+export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUserPort, IqUpdateUserStatePort, IqLoadUsersTopPort, IqLoadUserActivitiesPort, IqLoadAllUsersActivitiesPort, IqLoadAllUsersPort {
     constructor(
         private readonly _iqUserRepository: Repository<IqUserOrmEntity>,
         private readonly _iqUserActivityRepository: Repository<IqUserActivityOrmEntity>
@@ -88,6 +89,17 @@ export class IqUserPersistenceAdapter implements IqLoadUserPort, IqLoadOrAddUser
     async loadAllUsersActivities(): Promise<IqActivityWindowEntity>{
         const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find();
         return IqUserMapper.mapToActivityWindow(activities);
+    }
+
+    async loadAllUsers(): Promise<IqUserEntity[]>{
+        const usersOrm: IqUserOrmEntity[] = await this._iqUserRepository.find();
+        let users: IqUserEntity[] = [];
+        usersOrm.forEach((user) => {
+            //Need to fix
+            //const activities: IqUserActivityOrmEntity[] = await this._iqUserActivityRepository.find({username: user.username});
+            users.push(IqUserMapper.mapToUserEntity(user, []));
+        })
+        return users;
     }
 
 

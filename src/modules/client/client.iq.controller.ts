@@ -15,6 +15,7 @@ import { ChatUserstate } from "tmi.js-reply-fork";
 import _, { values } from "lodash";
 import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-window.entity";
 import { IqLoadAllUsersActivitiesUsePort } from "../../domain/IQ/ports/in/iq.load-all-users-activities.use-port";
+import { IqLoadAllUsersUsePort } from "../../domain/IQ/ports/in/iq.load-all-users.use-port";
 
 export class ClientIqController {
     //importing ports for db
@@ -22,6 +23,7 @@ export class ClientIqController {
     private static _iqLoadUsersTopUsePort: IqLoadUsersTopUsePort;
     private static _iqLoadUserUsePort: IqLoadUserUsePort;
     private static _iqLoadAllUsersActivitiesUsePort: IqLoadAllUsersActivitiesUsePort;
+    private static _iqLoadAllUsersUsePort: IqLoadAllUsersUsePort;
     private static _messageGeneratorGeneratePort: StringGeneratorGeneratePort;
 
     constructor() {}
@@ -31,6 +33,7 @@ export class ClientIqController {
         this._iqLoadUsersTopUsePort = new IqLoadUsersTopUsePort(iqAdapter);
         this._iqLoadUserUsePort = new IqLoadUserUsePort(iqAdapter);
         this._iqLoadAllUsersActivitiesUsePort = new IqLoadAllUsersActivitiesUsePort(iqAdapter);
+        this._iqLoadAllUsersUsePort = new IqLoadAllUsersUsePort(iqAdapter);
         this._messageGeneratorGeneratePort = new StringGeneratorGeneratePort(messageGeneratorAdapter);
 
         const simplifiedMessage: string = message.toLowerCase();
@@ -210,8 +213,7 @@ export class ClientIqController {
             const getIqResponse = new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage);
             return getIqResponse;
         }
-        const loadUsersCommand: IqLoadUsersTopCommand = new IqLoadUsersTopCommand(0, "DESC");
-        const usersCount: number = (await this._iqLoadUsersTopUsePort.loadUsersTop(loadUsersCommand)).length;
+        const usersCount: number = (await this._iqLoadAllUsersUsePort.loadAllUsers()).length;
         const getAllTests: IqActivityWindowEntity = await this._iqLoadAllUsersActivitiesUsePort.loadAllUsersActivities();
         const last24HTestsCount: number = getAllTests.activities.map((value) => {
             const curTime = Date.now();
