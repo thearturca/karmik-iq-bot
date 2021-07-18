@@ -76,7 +76,7 @@ export class IqUserEntity {
         const curTime: number = Date.now();
         let tryCount: number = 0;
         this._activityWindow.activities.forEach((activiity) => {
-            if(activiity.timestamp.getTime() > (curTime - 9 * 1000 * 60)) {
+            if(activiity.timestamp.getTime() > (curTime - 9 * 1000 * 60 * 60)) {
                 tryCount++;
             }
         });
@@ -107,13 +107,13 @@ export class IqUserEntity {
         this.setIq = iq;
 
         const activity: IqActivityEntity = new IqActivityEntity(this.username.toLowerCase(), new Date(), this.iq)
-        this._activityWindow.addActivity(activity)
+        this._activityWindow.addActivity(activity);
         return true;
     }
 
     public mayRollIq(): boolean {
         const curTime: number = Date.now();
-        if (this.lastTryTimestamp + - (9 * 1000 * 60 * 60) > curTime ) {
+        if (this.lastTryTimestamp + (9 * 1000 * 60 * 60) > curTime ) {
             return true;
         }
         if (this.tryNumber >= this.maxTryNumber) {
