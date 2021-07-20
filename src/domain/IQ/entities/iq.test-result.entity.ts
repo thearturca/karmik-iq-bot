@@ -4,7 +4,8 @@ export class IqTestResultEntity {
         private readonly _iq: number,
         private readonly _lastTryTimestamp: number,
         private readonly _maxTryNumber: number,
-        private readonly _tryNumber: number
+        private readonly _tryNumber: number,
+        private readonly _timeBeforeTest: number
     ) {}
 
     get status(): boolean {
@@ -25,5 +26,9 @@ export class IqTestResultEntity {
 
     get tryNumber(): number {
         return this._tryNumber;
+    }
+
+    get timeBeforeTest(): number {
+        return this._timeBeforeTest;
     }
 }

@@ -83,6 +83,12 @@ export class IqUserEntity {
         return tryCount;
     }
 
+    get timeBeforeTest(): number {
+        const curTime =Date.now();
+        const res: number = (this.lastTryTimestamp + 9 * 1000 * 60 * 60) - curTime;
+        return res;
+    }
+
     get lastTryTimestamp(): number {
         const timestampValues: number[] = this.activityWindow.activities.map(val => val.timestamp.getTime());
         const maxTimestampValue = Math.max.apply(null, timestampValues);

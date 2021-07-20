@@ -12,10 +12,10 @@ import { IqLoadUserUsePort } from "../../domain/IQ/ports/in/iq.load-user.use-por
 import { IqLoadUserCommand } from "../../domain/IQ/ports/in/iq.load-user.command";
 import { IqTestResultEntity } from "../../domain/IQ/entities/iq.test-result.entity";
 import { ChatUserstate } from "tmi.js-reply-fork";
-import _, { values } from "lodash";
 import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-window.entity";
 import { IqLoadAllUsersActivitiesUsePort } from "../../domain/IQ/ports/in/iq.load-all-users-activities.use-port";
 import { IqLoadAllUsersUsePort } from "../../domain/IQ/ports/in/iq.load-all-users.use-port";
+import _ from "lodash";
 
 export class ClientIqController {
     //importing ports for db
@@ -85,7 +85,7 @@ export class ClientIqController {
             return iqTestResponse;  
         } else {
             //generate message for response
-            const userCDinfo = Math.floor(((iqTestResult.lastTryTimestamp + 9 * 1000 * 60 * 60) - Date.now()) / 1000);
+            const userCDinfo = Math.floor(iqTestResult.timeBeforeTest / 1000);
             const userCdHours = Math.floor((userCDinfo / 60) / 60);
             const userCdMinutes = Math.floor((userCDinfo / 60) - (userCdHours * 60));
             
@@ -181,7 +181,6 @@ export class ClientIqController {
     }
 
     private static async _stats(user: ChatUserstate, message: string, commandArgs: string[]): Promise<ClientResponseEntity> {
-        const timerStart: number = Date.now();
         if (commandArgs[2] !== undefined) {
             const commandUsername = commandArgs[2].startsWith("@") ? commandArgs[2].substr(1) : commandArgs[2];
             const loadUserCommand = new IqLoadUserCommand(commandUsername);
@@ -213,7 +212,6 @@ export class ClientIqController {
                 last24HTestsCount: last24HTestsCount 
             });
             const getIqResponse = new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage);
-            console.log((Date.now() - timerStart));
             return getIqResponse;
         }
         const usersCount: number = (await this._iqLoadAllUsersUsePort.loadAllUsers()).length;
@@ -232,7 +230,6 @@ export class ClientIqController {
             usersCount: usersCount,
             last24HTestsCount: last24HTestsCount
         });
-        console.log((Date.now() - timerStart));
         return new ClientResponseEntity(ClientResponseType.reply, user, getIqStatsResponseMessage)
     }
 

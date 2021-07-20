@@ -21,6 +21,6 @@ export class IqTestService implements IqTestUseCase {
             await this._iqUpdateUserPort.updateUser(user);
             await this._iqUpdateUserPort.updateActivities(user);
         }
-        return new IqTestResultEntity(res, user.iq, user.lastTryTimestamp, user.maxTryNumber, user.tryNumber);
+        return new IqTestResultEntity(res, user.iq, user.lastTryTimestamp, user.maxTryNumber, user.tryNumber, user.timeBeforeTest);
     }
 }
