@@ -101,6 +101,7 @@ export class IqUserEntity {
 
     public rollIq(): boolean {
         if (!this.mayRollIq()) return false;
+        
         let monthsSubbed: number = Math.floor(randomG() * 24 + this.subMonths);
         monthsSubbed = Math.abs(2 + monthsSubbed);
         const VIPCoeff: number = this.isVip ? Math.floor(randomG() * 20) : 0;
