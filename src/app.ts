@@ -1,6 +1,6 @@
 import { ChatUserstate, client as _client } from 'tmi.js-reply-fork';
 import { ClientOnChatModule } from './modules/client/client.on-chat.module';
-import { ClientResponseEntity } from './modules/client/client.response.entity';
+import { ClientResponseEntity, ClientResponseType } from './modules/client/client.response.entity';
 import { GuardAdapter } from './modules/guard/guard.adapter';
 import { GuardModule } from './modules/guard/guard.module';
 import { IqUserPersistenceAdapter } from './modules/iq.user-persistence/iq.user-persistence.adapter';
@@ -55,14 +55,14 @@ export class app {
             if (!guard.maySendResponse()) return
 
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
-            switch(response.type?.toString()){
-                case 'none':
+            switch(response.type){
+                case ClientResponseType.none:
                     //await client.say(channel, response.message)
                     return
                 break;
 
-                case 'reply':
-                    await client.reply(channel, response.message, response.user);
+                case ClientResponseType.reply:
+                    await client.reply(channel, response.message, response.user || user);
                     guard.updateCooldownTime();
                     console.log("Date: ", new Date());
                     console.log("Message: \n", message);
@@ -70,7 +70,7 @@ export class app {
                     return
                 break;
 
-                case 'say':
+                case ClientResponseType.say:
                     await client.say(channel, response.message);
                     guard.updateCooldownTime();
                     console.log("Date: ", new Date());
