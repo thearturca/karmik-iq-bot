@@ -12,9 +12,11 @@ export class ClientOnChatController {
             return await ClientIqController.handle(user, message, adapters.messageGeneratorAdapter, adapters.iqAdapter);
         }
 
-        const commandsHandle: ClientResponseEntity = await ClientCommandsController.handle(user, message);
-        if (commandsHandle.type !== ClientResponseType.none) {
-            return commandsHandle;
+        if(simplifiedMessage.startsWith("!")) {
+            const commandsHandle: ClientResponseEntity = await ClientCommandsController.handle(user, message);
+            if (commandsHandle.type !== ClientResponseType.none) {
+                return commandsHandle;
+            }
         }
 
         return new ClientResponseEntity(ClientResponseType.none)

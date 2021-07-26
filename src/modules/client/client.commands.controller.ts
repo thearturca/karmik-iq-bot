@@ -6,6 +6,8 @@ export class ClientCommandsController {
     constructor () {}
 
     public static async handle(user: ChatUserstate, message: string): Promise<ClientResponseEntity> {
+
+        
         return new ClientResponseEntity(ClientResponseType.none);
     }
 }
