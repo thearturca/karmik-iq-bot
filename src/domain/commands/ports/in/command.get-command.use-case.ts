@@ -1,5 +1,7 @@
+import { CommandsGetCommandResponseEntity } from "../../entities/commands.get-command.response-entity";
+import { CommandsGetCommandCommand } from "./commands.get-command.command";
 
 
 export interface CommandsGetCommandUseCase {
-    getCommand(command: string): Promise<string>
+    getCommand(command: CommandsGetCommandCommand): Promise<CommandsGetCommandResponseEntity>
 }

@@ -1,6 +1,6 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-
+@Entity("CommandsBank")
 export class CommandsOrmEntity {
 
     @PrimaryGeneratedColumn()

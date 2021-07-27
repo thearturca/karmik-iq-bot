@@ -90,3 +90,4 @@ typings/
 config/
 db/
 data/*iq.db
+data/*commands.db

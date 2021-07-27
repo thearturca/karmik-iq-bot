@@ -13,7 +13,7 @@ export class ClientOnChatController {
         }
 
         if(simplifiedMessage.startsWith("!")) {
-            const commandsHandle: ClientResponseEntity = await ClientCommandsController.handle(user, message);
+            const commandsHandle: ClientResponseEntity = await ClientCommandsController.handle(user, message, adapters.commandsAdapter);
             if (commandsHandle.type !== ClientResponseType.none) {
                 return commandsHandle;
             }

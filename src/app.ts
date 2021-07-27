@@ -1,10 +1,12 @@
 import { ChatUserstate, client as _client } from 'tmi.js-reply-fork';
 import { ClientOnChatModule } from './modules/client/client.on-chat.module';
 import { ClientResponseEntity, ClientResponseType } from './modules/client/client.response.entity';
+import { CommandsPersistenceAdapter } from './modules/commands.persistence/commands.persistence.adapter';
+import { CommandsPersistenceModule } from './modules/commands.persistence/commands.persistence.module';
 import { GuardAdapter } from './modules/guard/guard.adapter';
 import { GuardModule } from './modules/guard/guard.module';
 import { IqUserPersistenceAdapter } from './modules/iq.user-persistence/iq.user-persistence.adapter';
-import { IqUserPersistenceModuel } from './modules/iq.user-persistence/iq.user-persistence.module';
+import { IqUserPersistenceModule } from './modules/iq.user-persistence/iq.user-persistence.module';
 import { MessageGeneratorPersistenceAdapter } from './modules/message-generator.persistence/message-generator-persistence.adapter';
 import { MessageGeneratorPersistenceModule } from './modules/message-generator.persistence/message-generator-persistence.module';
 
@@ -23,14 +25,21 @@ export class app {
         console.log("Connected!");
 
         //connect to iq db
-        const iqPersistenceModule: IqUserPersistenceModuel = new IqUserPersistenceModuel();
+        const iqPersistenceModule: IqUserPersistenceModule = new IqUserPersistenceModule();
         console.log("Connecting to iq DB...");
         const iqAdapter: IqUserPersistenceAdapter = await iqPersistenceModule.connect(target);
+        console.log("Connected!");
+
+        //connect to commands db
+        const commandsPersistenceModule: CommandsPersistenceModule = new CommandsPersistenceModule();
+        console.log("Connecting to commands DB...");
+        const commandsAdapter: CommandsPersistenceAdapter = await commandsPersistenceModule.connect(target);
         console.log("Connected!");
 
         const adapters: {[k: string]: any} = {};
         adapters.iqAdapter = iqAdapter;
         adapters.messageGeneratorAdapter = messageGeneratorAdapter;
+        adapters.commandsAdapter = commandsAdapter;
 
         const client = new _client({
             options: {

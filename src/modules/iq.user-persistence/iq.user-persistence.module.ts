@@ -5,7 +5,7 @@ import { IqUserOrmEntity } from "./iq.user.orm-entity";
 import { IqUserActivityOrmEntity } from "./iq.user.activity.orm-entity";
 
 
-export class IqUserPersistenceModuel {
+export class IqUserPersistenceModule {
     async connect (channel: string): Promise<IqUserPersistenceAdapter> { 
         const connection = await createConnection({
                 type: "sqlite",
