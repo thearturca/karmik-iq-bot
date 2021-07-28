@@ -9,6 +9,8 @@ import { IqUserPersistenceAdapter } from './modules/iq.user-persistence/iq.user-
 import { IqUserPersistenceModule } from './modules/iq.user-persistence/iq.user-persistence.module';
 import { MessageGeneratorPersistenceAdapter } from './modules/message-generator.persistence/message-generator-persistence.adapter';
 import { MessageGeneratorPersistenceModule } from './modules/message-generator.persistence/message-generator-persistence.module';
+import { PastaPersistenceAdapter } from './modules/pasta.persistence/pasta.persistence.adapter';
+import { PastaPersistenceModule } from './modules/pasta.persistence/pasta.persistence.module';
 
 export class app {
     public static async start(): Promise<void> {
@@ -36,10 +38,17 @@ export class app {
         const commandsAdapter: CommandsPersistenceAdapter = await commandsPersistenceModule.connect(target);
         console.log("Connected!");
 
+        //connect to pasta db
+        const  pastaPersistenceModule: PastaPersistenceModule = new PastaPersistenceModule();
+        console.log("Connecting to pasta DB...");
+        const pastaAdapter: PastaPersistenceAdapter = await pastaPersistenceModule.connect(target);
+        console.log("Connected!");
+
         const adapters: {[k: string]: any} = {};
         adapters.iqAdapter = iqAdapter;
         adapters.messageGeneratorAdapter = messageGeneratorAdapter;
         adapters.commandsAdapter = commandsAdapter;
+        adapters.pastaAdapter = pastaAdapter;
 
         const client = new _client({
             options: {

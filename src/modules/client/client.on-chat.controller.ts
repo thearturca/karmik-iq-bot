@@ -1,6 +1,7 @@
 import { ChatUserstate } from "tmi.js-reply-fork";
 import { ClientCommandsController } from "./client.commands.controller";
 import { ClientIqController } from "./client.iq.controller";
+import { ClientPastaController } from "./client.pasta.controller";
 import { ClientResponseEntity, ClientResponseType } from "./client.response.entity";
 
 
@@ -10,6 +11,10 @@ export class ClientOnChatController {
         
         if(simplifiedMessage.startsWith("!iq")) {
             return await ClientIqController.handle(user, message, adapters.messageGeneratorAdapter, adapters.iqAdapter);
+        }
+
+        if(simplifiedMessage.startsWith("!паста")) {
+            return await ClientPastaController.handle(user, message, adapters.pastaAdapter);
         }
 
         if(simplifiedMessage.startsWith("!")) {

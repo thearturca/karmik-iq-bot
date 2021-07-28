@@ -16,6 +16,7 @@ import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-win
 import { IqLoadAllUsersActivitiesUsePort } from "../../domain/IQ/ports/in/iq.load-all-users-activities.use-port";
 import { IqLoadAllUsersUsePort } from "../../domain/IQ/ports/in/iq.load-all-users.use-port";
 import _ from "lodash";
+import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
 
 export class ClientIqController {
     //importing ports for db
@@ -194,13 +195,9 @@ export class ClientIqController {
                 const getIqResponse = new ClientResponseEntity(ClientResponseType.reply, user, getIqResponseMessage + ' ' + getCommandsList);
                 return getIqResponse;
             }
-            commandUser
-
-            const last24HTestsCount: number = commandUser.activityWindow.activities.map((value) => {
+            const last24HTestsCount: number = commandUser.activityWindow.activities.filter((value) => {
                 const curTime = Date.now();
-                if(value.timestamp.getTime() > (curTime - 9 * 1000 * 60 * 60)){
-                    return value.timestamp.getTime();
-                }
+                return (value.timestamp.getTime() > (curTime - 9 * 1000 * 60 * 60));
             }).length;
             const getAllUserIq: number[] = commandUser.activityWindow.activities.map(val => val.iq);
             const avgIq: number = Math.floor(getAllUserIq.reduce((a,b)=> {return a+b}) / getAllUserIq.length);
@@ -216,11 +213,9 @@ export class ClientIqController {
         }
         const usersCount: number = (await this._iqLoadAllUsersUsePort.loadAllUsers()).length;
         const getAllTests: IqActivityWindowEntity = await this._iqLoadAllUsersActivitiesUsePort.loadAllUsersActivities();
-        const last24HTestsCount: number = getAllTests.activities.map((value) => {
+        const last24HTestsCount: number = getAllTests.activities.filter((value) => {
             const curTime = Date.now();
-            if(value.timestamp.getTime() > (curTime - 9 * 1000 * 60 * 60)){
-                return value.timestamp.getTime();
-            }
+            return (value.timestamp.getTime() > (curTime - 24 * 1000 * 60 * 60));
         }).length;
         const getAllIq: number[] = getAllTests.activities.map(val => val.iq);
         const avgIq: number = Math.floor(getAllIq.reduce((a,b)=> {return a+b}) / getAllIq.length);
