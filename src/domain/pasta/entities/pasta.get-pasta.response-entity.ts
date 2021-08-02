@@ -4,6 +4,7 @@ export class PastaGetPastaResponseEntity {
     constructor(
         private readonly _status: boolean,
         private readonly _pasta?: string,
+        private readonly _pastaId?: number,
         private readonly _pastaMessage?: string
     ) {}
 
@@ -11,9 +12,16 @@ export class PastaGetPastaResponseEntity {
         return this._status;
     }
 
+   
+
     get pasta(): string {
         if (this._pasta === undefined) return "No such pasta"
         return this._pasta;
+    }
+
+    get pastaId(): number | null {
+        if(this._pastaId === undefined) return null;
+        return this._pastaId
     }
 
     get pastaMessage(): string {

@@ -19,6 +19,6 @@ export class ClientPastaController {
         const pastaName = commandArgs[1]
         const getPastaCommand: PastaGetPastaCommand = new PastaGetPastaCommand(pastaName)
         const getPastaResponse: PastaGetPastaResponseEntity = await this._pastaGetPastaPort.getPasta(getPastaCommand);
-        return new ClientResponseEntity(ClientResponseType.reply, user, getPastaResponse.pastaMessage);
+        return new ClientResponseEntity(ClientResponseType.reply, user, `Цитата великих №${getPastaResponse.pastaId}: ${getPastaResponse.pastaMessage}`);
     }
 }

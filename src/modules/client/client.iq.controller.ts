@@ -42,11 +42,19 @@ export class ClientIqController {
         switch(commandArgs[1]) {
             case "test":
                 return await this._test(user, message);
+            case "тест":
+                return await this._test(user, message);
             case "top":
+                return await this._top(user, message, commandArgs);
+            case "топ":
                 return await this._top(user, message, commandArgs);
             case "antitop":
                 return await this._antitop(user, message, commandArgs);
+            case "антитоп":
+                return await this._antitop(user, message, commandArgs);
             case "stats":
+                return await this._stats(user, message, commandArgs);
+            case "стата":
                 return await this._stats(user, message, commandArgs);
             default:
                 return await this._default(user, message, commandArgs)

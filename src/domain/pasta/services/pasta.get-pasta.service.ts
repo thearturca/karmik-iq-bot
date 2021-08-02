@@ -13,6 +13,6 @@ export class PastaGetPastaService implements PastaGetPastaUseCase{
         if (getPastaMessage === null) return new PastaGetPastaResponseEntity(false, command.pastaName);
 
         const random: number = Math.floor(Math.random() * (getPastaMessage.length));
-        return new PastaGetPastaResponseEntity(true, command.pastaName, getPastaMessage[random]);
+        return new PastaGetPastaResponseEntity(true,  command.pastaName, random+1, getPastaMessage[random]);
     }
 }
