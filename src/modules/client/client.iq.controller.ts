@@ -16,7 +16,6 @@ import { IqActivityWindowEntity } from "../../domain/IQ/entities/iq.activity-win
 import { IqLoadAllUsersActivitiesUsePort } from "../../domain/IQ/ports/in/iq.load-all-users-activities.use-port";
 import { IqLoadAllUsersUsePort } from "../../domain/IQ/ports/in/iq.load-all-users.use-port";
 import _ from "lodash";
-import { IqActivityEntity } from "../../domain/IQ/entities/iq.activity.entity";
 
 export class ClientIqController {
     //importing ports for db
