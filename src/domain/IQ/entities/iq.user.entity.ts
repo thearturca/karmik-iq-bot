@@ -120,7 +120,7 @@ export class IqUserEntity {
 
     public mayRollIq(): boolean {
         const curTime: number = Date.now();
-        if (this.lastTryTimestamp + (9 * 1000 * 60 * 60) > curTime ) {
+        if (this.lastTryTimestamp + (9 * 1000 * 60 * 60) < curTime ) {
             return true;
         }
         if (this.tryNumber >= this.maxTryNumber) {
