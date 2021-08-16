@@ -58,8 +58,8 @@ export class app {
               reconnect: true
             },
             identity: {
-                username: "thearturca",
-                password: "oauth:grn7crnga7ia39u9jdvweio2wc21t2"
+                username: process.env.TWITCH_USERNAME,
+                password: process.env.TWITCH_OAUTH
             },
             channels: [target]
         });
