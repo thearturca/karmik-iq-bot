@@ -1,5 +1,5 @@
 
 
 export interface MemesLoadTriggersPort {
-    loadTriggers(): Promise<>
+    loadTriggers(): Promise<string[]>
 }

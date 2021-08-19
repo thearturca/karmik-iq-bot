@@ -1,13 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { MemesTriggersOrmEntity } from "./memes.triggers.orm-entity";
 
 @Entity("MemesTriggers")
-export class MemesTriggersOrmEntity {
+export class MemesOrmEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    memeTrigger: string;
+    @ManyToOne(() => MemesTriggersOrmEntity, trigger => trigger.memeTrigger)
+    memeTrigger: MemesTriggersOrmEntity;
 
     @Column()
     meme: string;
