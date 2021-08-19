@@ -7,6 +7,8 @@ import { GuardAdapter } from './modules/guard/guard.adapter';
 import { GuardModule } from './modules/guard/guard.module';
 import { IqUserPersistenceAdapter } from './modules/iq.user-persistence/iq.user-persistence.adapter';
 import { IqUserPersistenceModule } from './modules/iq.user-persistence/iq.user-persistence.module';
+import { MemesPersistenceAdapter } from './modules/memes.persistence/memes.persistence.adapter';
+import { MemesPersistenceModule } from './modules/memes.persistence/memes.persistence.module';
 import { MessageGeneratorPersistenceAdapter } from './modules/message-generator.persistence/message-generator-persistence.adapter';
 import { MessageGeneratorPersistenceModule } from './modules/message-generator.persistence/message-generator-persistence.module';
 import { PastaPersistenceAdapter } from './modules/pasta.persistence/pasta.persistence.adapter';
@@ -38,6 +40,12 @@ export class app {
         const commandsAdapter: CommandsPersistenceAdapter = await commandsPersistenceModule.connect(target);
         console.log("Connected!");
 
+        //connect to memes db
+        const memesPersistenceModule: MemesPersistenceModule = new MemesPersistenceModule();
+        console.log("Connecting to memes DB...");
+        const memesAdapter: MemesPersistenceAdapter = await memesPersistenceModule.connect(target);
+        console.log("Connected!");
+
         //connect to pasta db
         const  pastaPersistenceModule: PastaPersistenceModule = new PastaPersistenceModule();
         console.log("Connecting to pasta DB...");
@@ -49,6 +57,7 @@ export class app {
         adapters.messageGeneratorAdapter = messageGeneratorAdapter;
         adapters.commandsAdapter = commandsAdapter;
         adapters.pastaAdapter = pastaAdapter;
+        adapters.memesAdapter = memesAdapter;
 
         const client = new _client({
             options: {

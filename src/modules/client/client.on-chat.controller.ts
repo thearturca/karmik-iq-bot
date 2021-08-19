@@ -1,6 +1,7 @@
 import { ChatUserstate } from "tmi.js-reply-fork";
 import { ClientCommandsController } from "./client.commands.controller";
 import { ClientIqController } from "./client.iq.controller";
+import { ClientMemesController } from "./client.memes.controller";
 import { ClientPastaController } from "./client.pasta.controller";
 import { ClientResponseEntity, ClientResponseType } from "./client.response.entity";
 
@@ -22,6 +23,11 @@ export class ClientOnChatController {
             if (commandsHandle.type !== ClientResponseType.none) {
                 return commandsHandle;
             }
+        }
+
+        const memesHandle: ClientResponseEntity = await ClientMemesController.handle(user, message, adapters.memesAdapter);
+        if (memesHandle.type !== ClientResponseType.none) {
+            return memesHandle;
         }
 
         return new ClientResponseEntity(ClientResponseType.none)
