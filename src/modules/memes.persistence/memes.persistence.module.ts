@@ -1,7 +1,8 @@
 import { join } from "path";
 import { createConnection } from "typeorm";
-import { MemesTriggersOrmEntity } from "./memes.orm-entity";
+import { MemesOrmEntity} from "./memes.orm-entity";
 import { MemesPersistenceAdapter } from "./memes.persistence.adapter";
+import { MemesTriggersOrmEntity } from "./memes.triggers.orm-entity";
 
 
 export class MemesPersistenceModule {
@@ -10,11 +11,11 @@ export class MemesPersistenceModule {
                         type: "sqlite",
                         database: join (__dirname, "..", "..", "..", "..", "data", `${channel}-memes.db`),
                         name: channel + "-memes",
-                        entities: [MemesTriggersOrmEntity],
+                        entities: [MemesTriggersOrmEntity, MemesOrmEntity],
                         synchronize: true,
                         logging: false
                 });
 
-                return new MemesPersistenceAdapter(connection.getRepository(MemesTriggersOrmEntity));
+                return new MemesPersistenceAdapter(connection.getRepository(MemesTriggersOrmEntity), connection.getRepository(MemesOrmEntity));
         }
 }

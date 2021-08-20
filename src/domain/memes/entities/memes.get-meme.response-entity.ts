@@ -1,9 +1,10 @@
+import { MemesTypes } from "./memes.factory-entity";
 
 
 export class MemesGetMemeResponseEntity {
     constructor(
         private readonly _status: boolean,
-        private readonly _meme?: string,
+        private readonly _meme?:MemesTypes,
         private readonly _memeMessage?: string
     ) {}
 

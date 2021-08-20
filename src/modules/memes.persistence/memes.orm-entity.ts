@@ -1,7 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { MemesTypes } from "../../domain/memes/entities/memes.factory-entity";
 import { MemesTriggersOrmEntity } from "./memes.triggers.orm-entity";
 
-@Entity("MemesTriggers")
+@Entity("Memes")
 export class MemesOrmEntity {
 
     @PrimaryGeneratedColumn()
@@ -10,6 +11,10 @@ export class MemesOrmEntity {
     @ManyToOne(() => MemesTriggersOrmEntity, trigger => trigger.memeTrigger)
     memeTrigger: MemesTriggersOrmEntity;
 
-    @Column()
-    meme: string;
+    @Column({
+        type: "simple-enum",
+        enum: MemesTypes,
+        nullable: false
+    })
+    meme: MemesTypes;
 }

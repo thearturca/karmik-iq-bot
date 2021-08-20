@@ -24,9 +24,11 @@ export class MemesPersistenceAdapter implements MemesLoadTriggersPort, MemesLoad
     }
 
     async loadMemesType(trigger: string): Promise<MemesTypes | null> {
-        const resOrmEntity: MemesOrmEntity | undefined = await this._memesRepository.findOne({memeTrigger: {memeTrigger: trigger}});
+        const triggerOrmEntity: MemesTriggersOrmEntity | undefined = await this._memesTriggersRepository.findOne({memeTrigger: trigger});
+        if (triggerOrmEntity === undefined) return null;
+        const resOrmEntity: MemesOrmEntity | undefined = await this._memesRepository.findOne({memeTrigger: triggerOrmEntity});
         if (resOrmEntity === undefined) return null;
-        const res: MemesTypes = MemesTypes[resOrmEntity.meme]
+        const res: MemesTypes = resOrmEntity.meme;
         return res;
     }
 }

@@ -9,7 +9,7 @@ export class MemesToiletFactoryEntity implements MemesFactoryInterface {
 
     meme(username: string): string {
         const rngPhrase = Math.floor(Math.random()*(toilet.length-1));
-        const res: string = `${username} — ${toilet[rngPhrase]}. Без негатива karmikSmile SantaHat`;
+        const res: string = `${username} — ${toilet[rngPhrase]}. Без негатива karmikSmile`;
         return res
     }
 }
