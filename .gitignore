@@ -91,3 +91,4 @@ config/
 db/
 data/*iq.db
 data/*commands.db
+ecosystem.config.js
