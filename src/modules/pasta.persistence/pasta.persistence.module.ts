@@ -8,7 +8,7 @@ export class PastaPersistenceModule {
         async connect (channel: string): Promise<PastaPersistenceAdapter> { 
                 const connection = await createConnection({
                         type: "sqlite",
-                        database: join (__dirname, "..", "..", "..", "..", "data", `${channel}-pasta.db`),
+                        database: join (process.env.DATA_PATH || "./", "data", `${channel}-pasta.db`),
                         name: channel + "-pasta",
                         entities: [PastaOrmEntity],
                         synchronize: true,

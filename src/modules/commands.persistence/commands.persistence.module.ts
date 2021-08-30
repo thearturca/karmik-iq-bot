@@ -8,7 +8,7 @@ export class CommandsPersistenceModule {
         async connect (channel: string): Promise<CommandsPersistenceAdapter> { 
                 const connection = await createConnection({
                         type: "sqlite",
-                        database: join (__dirname, "..", "..", "..", "..", "data", `${channel}-commands.db`),
+                        database: join (process.env.DATA_PATH || "./", "data", `${channel}-commands.db`),
                         name: channel + "-commands",
                         entities: [CommandsOrmEntity],
                         synchronize: true,

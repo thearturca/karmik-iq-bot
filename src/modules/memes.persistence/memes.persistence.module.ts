@@ -9,7 +9,7 @@ export class MemesPersistenceModule {
         async connect (channel: string): Promise<MemesPersistenceAdapter> { 
                 const connection = await createConnection({
                         type: "sqlite",
-                        database: join (__dirname, "..", "..", "..", "..", "data", `${channel}-memes.db`),
+                        database: join (process.env.DATA_PATH || "./", "data", `${channel}-memes.db`),
                         name: channel + "-memes",
                         entities: [MemesTriggersOrmEntity, MemesOrmEntity],
                         synchronize: true,

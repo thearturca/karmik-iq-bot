@@ -8,7 +8,7 @@ export class MessageGeneratorPersistenceModule {
     async connect (): Promise<MessageGeneratorPersistenceAdapter> { 
         const connection = await createConnection({
                 type: "sqlite",
-                database: join (__dirname, "..", "..", "..", "..", "data", "message-generator.db"),
+                database: join (process.env.DATA_PATH || "./", "data", "message-generator.db"),
                 name: "messageGenerator",
                 entities: [GeneratedMessageOrmEntity],
                 synchronize: true,
