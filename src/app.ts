@@ -20,9 +20,29 @@ export class app {
         const guard: GuardAdapter = new GuardModule();
 
         //set twitch tmi credentials
-        const target = "starladder1337";
         const tmiUsername = process.env.TWITCH_USERNAME;
         const tmiSecret = process.env.TWITCH_OAUTH;
+
+        //set twitch tmi target channel
+        const target: string = process.env.TWITCH_TARGET_CHANNEL || tmiUsername;
+
+        const client = new _client({
+            options: {
+              debug: false
+            },
+            connection: {
+              reconnect: true
+            },
+            identity: {
+                username: tmiUsername,
+                password: tmiSecret
+            },
+            channels: [target]
+        });
+
+        console.log(`Connecting to ${target} twitch channel...`);
+        await client.connect();
+        console.log("Connected!");
 
         //connect to response message db
         const messageGeneratorPersistenceModule: MessageGeneratorPersistenceModule = new MessageGeneratorPersistenceModule();
@@ -60,24 +80,6 @@ export class app {
         adapters.commandsAdapter = commandsAdapter;
         adapters.pastaAdapter = pastaAdapter;
         adapters.memesAdapter = memesAdapter;
-
-        const client = new _client({
-            options: {
-              debug: false
-            },
-            connection: {
-              reconnect: true
-            },
-            identity: {
-                username: tmiUsername,
-                password: tmiSecret
-            },
-            channels: [target]
-        });
-
-        console.log(`Connecting to ${target} twitch channel...`);
-        await client.connect();
-        console.log("Connected!");
 
         client.on("notice", async (channel: string, message: string) => {
             console.log(message);
