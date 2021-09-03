@@ -92,3 +92,7 @@ db/
 data/*iq.db
 data/*commands.db
 ecosystem.config.js
+data/starladder1337-memes.db
+data/starladder1337-pasta.db
+data/thearturca-memes.db
+data/thearturca-pasta.db

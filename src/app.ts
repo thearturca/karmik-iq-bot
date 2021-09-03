@@ -19,8 +19,10 @@ export class app {
         //guard and cooldown adapter
         const guard: GuardAdapter = new GuardModule();
 
-        //set target twitch channel
-        const target = "karmikkoala"
+        //set twitch tmi credentials
+        const target = "starladder1337";
+        const tmiUsername = process.env.TWITCH_USERNAME;
+        const tmiSecret = process.env.TWITCH_OAUTH;
 
         //connect to response message db
         const messageGeneratorPersistenceModule: MessageGeneratorPersistenceModule = new MessageGeneratorPersistenceModule();
@@ -67,8 +69,8 @@ export class app {
               reconnect: true
             },
             identity: {
-                username: process.env.TWITCH_USERNAME,
-                password: process.env.TWITCH_OAUTH
+                username: tmiUsername,
+                password: tmiSecret
             },
             channels: [target]
         });
@@ -76,6 +78,16 @@ export class app {
         console.log(`Connecting to ${target} twitch channel...`);
         await client.connect();
         console.log("Connected!");
+
+        client.on("notice", async (channel: string, message: string) => {
+            console.log(message);
+        })
+
+        client.on("timeout", (channel: string, username: string, reason: string, duration: number) => {
+            if(username === tmiUsername) {
+                guard.startTimeout(duration);
+            }
+        })
         
         client.on("chat", async (channel: string, user: ChatUserstate, message: string, self: boolean) => {
             if (self) return
