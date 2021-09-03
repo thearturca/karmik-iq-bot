@@ -20,8 +20,8 @@ export class app {
         const guard: GuardAdapter = new GuardModule();
 
         //set twitch tmi credentials
-        const tmiUsername = process.env.TWITCH_USERNAME;
-        const tmiSecret = process.env.TWITCH_OAUTH;
+        const tmiUsername: string = process.env.TWITCH_USERNAME;
+        const tmiSecret: string = process.env.TWITCH_OAUTH;
 
         //set twitch tmi target channel
         const target: string = process.env.TWITCH_TARGET_CHANNEL || tmiUsername;
