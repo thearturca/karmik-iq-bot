@@ -15,4 +15,8 @@ export class PastaPersistenceAdapter implements PastaLoadPastaPort {
         });
         return res;
     }
+
+    addPasta(pasta: string, alias: string = "pasta"): void {
+        this._pastaRepository.insert({pasta: pasta, alias: alias});
+    }
 }

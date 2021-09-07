@@ -2,6 +2,7 @@ import { PastaGetPastaResponseEntity } from "../entities/pasta.get-pasta.respons
 import { PastaGetPastaUseCase } from "../ports/in/pasta.get-pasta.use-case";
 import { PastaGetPastaCommand } from "../ports/in/pasta.get-pasta.command";
 import { PastaLoadPastaPort } from "../ports/out/pasta.load-pasta.port";
+import { AddPastaCommand } from "../ports/in/pasta.add-pasta.command";
 
 export class PastaGetPastaService implements PastaGetPastaUseCase{
     constructor(
@@ -17,5 +18,9 @@ export class PastaGetPastaService implements PastaGetPastaUseCase{
         }
         const random: number = Math.floor(Math.random() * (getPastaMessage.length));
         return new PastaGetPastaResponseEntity(true,  command.pastaName, random+1, getPastaMessage[random]);
+    }
+
+    addPasta(command: AddPastaCommand): void {
+        this._pastaLoadPastaPort.addPasta(command.pasta, command.alias);
     }
 }
