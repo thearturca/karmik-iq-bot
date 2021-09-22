@@ -81,6 +81,13 @@ export class app {
         adapters.pastaAdapter = pastaAdapter;
         adapters.memesAdapter = memesAdapter;
 
+        const trimUserTag = (msg: string): string => {
+            if (msg.startsWith("@")){
+                return msg.slice(msg.indexOf(" "), msg.length);
+            }
+            return msg;
+        }
+
         client.on("notice", async (channel: string, message: string) => {
             console.log(message);
         })
@@ -94,6 +101,10 @@ export class app {
         client.on("chat", async (channel: string, user: ChatUserstate, message: string, self: boolean) => {
             if (self) return
             if (!guard.maySendResponse()) return
+
+            if (user["reply-parent-msg-id"] !== undefined){
+                message = trimUserTag(message);
+            };
 
             const response: ClientResponseEntity = await ClientOnChatModule.handle(user, message, adapters);
             switch(response.type){
