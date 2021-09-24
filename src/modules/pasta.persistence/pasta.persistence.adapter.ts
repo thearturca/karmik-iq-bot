@@ -19,4 +19,12 @@ export class PastaPersistenceAdapter implements PastaLoadPastaPort {
     addPasta(pasta: string, alias: string = "pasta"): void {
         this._pastaRepository.insert({pasta: pasta, alias: alias});
     }
+
+    async updatePasta(pastaId: number, pasta: string): Promise<boolean> {
+        const getPasta: PastaOrmEntity | undefined = await this._pastaRepository.findOne({id: pastaId});
+        if (getPasta === undefined) return false
+        getPasta.pasta = pasta;
+        this._pastaRepository.save(getPasta)
+        return true
+    }
 }

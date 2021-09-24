@@ -3,6 +3,7 @@ import { PastaGetPastaUseCase } from "../ports/in/pasta.get-pasta.use-case";
 import { PastaGetPastaCommand } from "../ports/in/pasta.get-pasta.command";
 import { PastaLoadPastaPort } from "../ports/out/pasta.load-pasta.port";
 import { AddPastaCommand } from "../ports/in/pasta.add-pasta.command";
+import { UpdatePastaCommand } from "../ports/in/pasta.update-pasta.command";
 
 export class PastaGetPastaService implements PastaGetPastaUseCase{
     constructor(
@@ -24,5 +25,10 @@ export class PastaGetPastaService implements PastaGetPastaUseCase{
 
     addPasta(command: AddPastaCommand): void {
         this._pastaLoadPastaPort.addPasta(command.pasta, command.alias);
+    }
+    
+    async updatePasta(command: UpdatePastaCommand): Promise<void> {
+        const res = await this._pastaLoadPastaPort.updatePasta(command.pastaId, command.pasta);
+        
     }
 }

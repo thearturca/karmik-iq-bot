@@ -41,7 +41,11 @@ export class app {
         });
 
         console.log(`Connecting to ${target} twitch channel...`);
-        await client.connect();
+        try{
+            await client.connect();
+        } catch (e) {
+            console.log(e);
+        }
         console.log("Connected!");
 
         //connect to response message db
