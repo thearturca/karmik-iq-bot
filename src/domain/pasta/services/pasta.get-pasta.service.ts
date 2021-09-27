@@ -11,7 +11,14 @@ export class PastaGetPastaService implements PastaGetPastaUseCase{
     ) {}
 
     async getPasta(command: PastaGetPastaCommand): Promise<PastaGetPastaResponseEntity> {
-        const getPastaMessage: string[] | null = await this._pastaLoadPastaPort.loadPasta(command.pastaName);
+        const pastaId: number = Number(command.pastaName);
+        if (pastaId !== NaN) {
+            const getPastaMessageById: string | null = await this._pastaLoadPastaPort.loadPastaById(pastaId);
+            if (getPastaMessageById !== null) {
+                return new PastaGetPastaResponseEntity(true,  command.pastaName, pastaId , getPastaMessageById);
+            }
+        }
+        const getPastaMessage: string[] | null = await this._pastaLoadPastaPort.loadPasta();
         if (getPastaMessage === null) return new PastaGetPastaResponseEntity(false, command.pastaName);
 
         const pastaNumber: number = Number(command.pastaName)-1;

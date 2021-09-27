@@ -15,7 +15,7 @@ export class PastaGetPastaResponseEntity {
    
 
     get pasta(): string {
-        if (this._pasta === undefined) return "No such pasta"
+        if (this._pasta === undefined) return "Нет пасты"
         return this._pasta;
     }
 
@@ -25,7 +25,7 @@ export class PastaGetPastaResponseEntity {
     }
 
     get pastaMessage(): string {
-        if (this._pastaMessage === undefined) return "No such pasta"
+        if (this._pastaMessage === undefined) return "Нет пасты"
         return this._pastaMessage;
     }
 }

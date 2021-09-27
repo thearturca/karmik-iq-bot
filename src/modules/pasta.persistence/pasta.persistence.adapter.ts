@@ -8,12 +8,18 @@ export class PastaPersistenceAdapter implements PastaLoadPastaPort {
         private readonly _pastaRepository: Repository<PastaOrmEntity>
     ) {}
 
-    async loadPasta(command: string): Promise<string[] | null> {
+    async loadPasta(): Promise<string[] | null> {
         const responsePasta: PastaOrmEntity[] = await this._pastaRepository.find();
         const res: string[] = responsePasta.map((val) => {
             return val.pasta
         });
         return res;
+    }
+
+    async loadPastaById(pastaId: number): Promise<string | null> {
+        const responsePasta: PastaOrmEntity | undefined = await this._pastaRepository.findOne({id: pastaId});
+        if(responsePasta === undefined) return null
+        return responsePasta.pasta;
     }
 
     addPasta(pasta: string, alias: string = "pasta"): void {
