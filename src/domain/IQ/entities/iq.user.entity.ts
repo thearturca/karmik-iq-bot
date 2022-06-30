@@ -123,10 +123,11 @@ export class IqUserEntity {
         if (this.lastTryTimestamp + (9 * 1000 * 60 * 60) < curTime ) {
             return true;
         }
+
         if (this.tryNumber >= this.maxTryNumber) {
             return false;
-        } else {
-            return true;
         }
+        
+        return true;
     }
 }
