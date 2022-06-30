@@ -2,7 +2,6 @@ import { randomG } from "../../IQ/entities/iq.utility";
 import { MemesFactoryInterface } from "./memes.factory-interface";
 
 const gachiEmotes: string[] = [
-    "gachiJAM",
     "gachiGASM",
     "gachiHYPER",
     "gachiBASS"
